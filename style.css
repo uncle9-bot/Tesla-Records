@@ -80,7 +80,8 @@ body {
 }
 
 .form-group input,
-.form-group textarea {
+.form-group textarea,
+.form-group select {
     width: 100%;
     padding: 8px 9px;
     border: 1px solid #ccc;
@@ -99,12 +100,12 @@ body {
     color: red;
 }
 
-/* Location: 50% width compared with a full-width field */
+/* Location half width */
 .location-half {
     max-width: 50%;
 }
 
-/* Duration: grey, not editable look */
+/* Duration read-only styles */
 .duration-group input {
     background-color: var(--color-duration-grey);
     color: #555;
@@ -119,21 +120,20 @@ body {
     margin-top: 10px;
 }
 
-.secondary-buttons {
-    margin-top: 6px;
-}
-
 .btn {
+    flex: 1 1 0;
+    padding: 10px 10px;
     border: none;
     border-radius: 6px;
-    padding: 8px 12px;
-    font-size: 0.9em;
+    color: white;
     cursor: pointer;
+    font-weight: bold;
+    font-size: 0.9em;
+    transition: background-color 0.2s ease;
 }
 
 .btn-green {
     background-color: var(--color-green);
-    color: white;
 }
 
 .btn-green:hover {
@@ -141,12 +141,25 @@ body {
 }
 
 .btn-grey {
-    background-color: #bbb;
-    color: white;
+    background-color: var(--color-grey);
 }
 
 .btn-grey:hover {
-    background-color: #999;
+    background-color: #455a64;
+}
+
+/* Actions card */
+.actions-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 10px 16px 12px 16px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    margin-bottom: 14px;
+}
+
+.actions-card h3 {
+    margin: 0 0 6px 0;
+    font-size: 1em;
 }
 
 /* Records table section */
@@ -220,12 +233,9 @@ body {
         padding: 6px;
     }
     .form-section,
-    .records-list-section {
+    .records-list-section,
+    .actions-card {
         padding: 10px 10px 12px 10px;
-    }
-    .form-row {
-        flex-direction: row;
-        flex-wrap: wrap;
     }
     .location-half {
         max-width: 100%;
