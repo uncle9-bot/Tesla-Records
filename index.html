@@ -8,28 +8,36 @@
 </head>
 <body>
     <div class="container">
-        
+        <!-- Dashboard -->
         <header class="dashboard">
             <p id="days-since-charge">No. of Days of Last Fully Charged: Calculating...</p>
             <p id="total-expenditure">Total Expenditures: $0.00</p>
         </header>
 
-        <section class="form-card">
-            <h2>⚙️ Maintenance Entry Form</h2>
-            <form id="entry-form">
-                <input type="hidden" id="record-id" value=""> 
+        <!-- Entry Form -->
+        <section class="form-section">
+            <h2>Tesla Charging & Maintenance Entry</h2>
 
+            <form id="entry-form">
+                <input type="hidden" id="record-id" value="">
+
+                <!-- Row 1: Date only -->
                 <div class="form-row">
                     <div class="form-group required-field">
                         <label for="input-Date">Date</label>
                         <input type="date" id="input-Date" required>
                     </div>
-                    <div class="form-group">
+                </div>
+
+                <!-- Row 2: Location (moved to next row, 50% width of full field) -->
+                <div class="form-row">
+                    <div class="form-group location-half">
                         <label for="input-Location">Location</label>
                         <input type="text" id="input-Location">
                     </div>
                 </div>
 
+                <!-- Row 3: Starting Time, Ending Time, Duration (auto) -->
                 <div class="form-row">
                     <div class="form-group">
                         <label for="input-Starting Time">Starting Time</label>
@@ -39,12 +47,13 @@
                         <label for="input-Ending Time">Ending Time</label>
                         <input type="time" id="input-Ending Time">
                     </div>
-                    <div class="form-group">
-                        <label for="input-Duratin">Duration (e.g., 1:30)</label>
-                        <input type="text" id="input-Duratin">
+                    <div class="form-group duration-group">
+                        <label for="input-Duratin">Duration (auto)</label>
+                        <input type="text" id="input-Duratin" readonly>
                     </div>
                 </div>
 
+                <!-- Row 4: Starting km, Ending km, km added -->
                 <div class="form-row">
                     <div class="form-group">
                         <label for="input-Starting km">Starting km</label>
@@ -60,6 +69,7 @@
                     </div>
                 </div>
 
+                <!-- Row 5: Claimed kW, Claimed Amp, km/hr -->
                 <div class="form-row">
                     <div class="form-group">
                         <label for="input-ClaimedkW">Claimed kW</label>
@@ -73,30 +83,25 @@
                         <label for="input-km/hr">km/hr</label>
                         <input type="number" id="input-km/hr" step="0.01">
                     </div>
+                </div>
+
+                <!-- Row 6: kWh added, Fully Charged, Full km -->
+                <div class="form-row">
                     <div class="form-group">
                         <label for="input-kWh added">kWh added</label>
                         <input type="number" id="input-kWh added" step="0.01">
                     </div>
-                </div>
-
-                <div class="form-row">
+                    <div class="form-group">
+                        <label for="input-Fully Charged">Fully Charged (Yes/No)</label>
+                        <input type="text" id="input-Fully Charged" placeholder="Yes / No">
+                    </div>
                     <div class="form-group">
                         <label for="input-Full km">Full km</label>
                         <input type="number" id="input-Full km">
                     </div>
-                    <div class="form-group">
-                        <label for="input-Odometer">Odometer</label>
-                        <input type="text" id="input-Odometer">
-                    </div>
-                    <div class="form-group">
-                        <label for="input-Fully Charged">Fully Charged?</label>
-                        <select id="input-Fully Charged">
-                            <option value="No">No</option>
-                            <option value="Yes">Yes</option>
-                        </select>
-                    </div>
                 </div>
 
+                <!-- Row 7: Charging Fee, Parking Fee -->
                 <div class="form-row">
                     <div class="form-group">
                         <label for="input-Charging Fee">Charging Fee ($)</label>
@@ -107,49 +112,10 @@
                         <input type="number" id="input-Parking Fee" step="0.01">
                     </div>
                 </div>
-                
+
+                <!-- Row 8: $/kW, $/km, Odometer -->
                 <div class="form-row">
                     <div class="form-group">
                         <label for="input-$/kW">Cost per kW ($/kW)</label>
                         <input type="number" id="input-$/kW" step="0.01">
                     </div>
-                    <div class="form-group">
-                        <label for="input-$/km">Cost per km ($/km)</label>
-                        <input type="number" id="input-$/km" step="0.01">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="input-Maintenance">Maintenance</label>
-                    <input type="text" id="input-Maintenance">
-                </div>
-                <div class="form-group">
-                    <label for="input-Remarks">Remarks</label>
-                    <textarea id="input-Remarks" rows="2"></textarea>
-                </div>
-                
-                <div class="button-group">
-                    <button type="submit" id="save-btn" class="btn btn-deep-green">💾 Save New Entry</button>
-                    <button type="button" id="clear-btn" class="btn btn-grey">➕ New/Clear Form</button>
-                </div>
-            </form>
-        </section>
-
-        <section class="actions-card">
-            <h3>Download & Utilities</h3>
-            <div class="button-group">
-                <button id="download-csv-btn" class="btn btn-green">⬇️ Download CSV</button>
-                <button id="download-gsheet-btn" class="btn btn-green">⬇️ Download for Google Sheets</button>
-            </div>
-        </section>
-
-        <section class="records-list-section">
-            <h3>📑 All Maintenance Records (Scrollable)</h3>
-            <div id="records-table-container">
-                </div>
-        </section>
-    </div>
-
-    <script src="script.js"></script>
-</body>
-</html>
