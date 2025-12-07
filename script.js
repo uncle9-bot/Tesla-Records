@@ -1,7 +1,6 @@
-// Tesla Maintenance Tracker - Client-side logic
-// Records are stored in browser localStorage and (optionally) seeded from initial_data.csv.
+// Tesla Maintenance Tracker - Logic
 
-const STORAGE_KEY = "teslaMaintenanceRecords_v1";
+const STORAGE_KEY = "teslaMaintenanceRecords_v2"; // new key so fresh load if needed
 
 // Column order used for table and CSV
 const HEADERS = [
@@ -28,34 +27,34 @@ const HEADERS = [
   "Remarks"
 ];
 
-// Mapping between form input IDs in index.html and data keys
+// Mapping between form input IDs and data keys
 const FIELD_IDS = [
-  { id: "input-Date",           key: "Date" },
-  { id: "input-Location",       key: "Location" },
-  { id: "input-Starting Time",  key: "Starting Time" },
-  { id: "input-Ending Time",    key: "Ending Time" },
-  { id: "input-Duratin",        key: "Duratin" },
-  { id: "input-Starting km",    key: "Starting km" },
-  { id: "input-Ending km",      key: "Ending km" },
-  { id: "input-km added",       key: "km added" },
-  { id: "input-ClaimedkW",      key: "ClaimedkW" },
-  { id: "input-Claimed Amp",    key: "Claimed Amp" },
-  { id: "input-km/hr",          key: "km/hr" },
-  { id: "input-kWh added",      key: "kWh added" },
-  { id: "input-Fully Charged",  key: "Fully Charged" },
-  { id: "input-Full km",        key: "Full km" },
-  { id: "input-Charging Fee",   key: "Charging Fee" },
-  { id: "input-Parking Fee",    key: "Parking Fee" },
-  { id: "input-$/kW",           key: "$/kW" },
-  { id: "input-$/km",           key: "$/km" },
-  { id: "input-Odometer",       key: "Odometer" },
-  { id: "input-Maintenance",    key: "Maintenance" },
-  { id: "input-Remarks",        key: "Remarks" }
+  { id: "input-Date",          key: "Date" },
+  { id: "input-Location",      key: "Location" },
+  { id: "input-Starting Time", key: "Starting Time" },
+  { id: "input-Ending Time",   key: "Ending Time" },
+  { id: "input-Duratin",       key: "Duratin" },
+  { id: "input-Starting km",   key: "Starting km" },
+  { id: "input-Ending km",     key: "Ending km" },
+  { id: "input-km added",      key: "km added" },
+  { id: "input-ClaimedkW",     key: "ClaimedkW" },
+  { id: "input-Claimed Amp",   key: "Claimed Amp" },
+  { id: "input-km/hr",         key: "km/hr" },
+  { id: "input-kWh added",     key: "kWh added" },
+  { id: "input-Fully Charged", key: "Fully Charged" },
+  { id: "input-Full km",       key: "Full km" },
+  { id: "input-Charging Fee",  key: "Charging Fee" },
+  { id: "input-Parking Fee",   key: "Parking Fee" },
+  { id: "input-$/kW",          key: "$/kW" },
+  { id: "input-$/km",          key: "$/km" },
+  { id: "input-Odometer",      key: "Odometer" },
+  { id: "input-Maintenance",   key: "Maintenance" },
+  { id: "input-Remarks",       key: "Remarks" }
 ];
 
 let records = [];
 
-// ---- Utility: CSV parsing & building ----
+// -------- CSV helpers --------
 function parseCsvLine(line) {
   const result = [];
   let current = "";
@@ -66,7 +65,6 @@ function parseCsvLine(line) {
 
     if (inQuotes) {
       if (ch === "\"") {
-        // Double quote inside quoted field -> escaped quote
         if (i + 1 < line.length && line[i + 1] === "\"") {
           current += "\"";
           i++;
@@ -126,15 +124,13 @@ function buildCsv(rows) {
   return [headerRow, ...bodyRows].join("\n");
 }
 
-// ---- Storage helpers ----
+// -------- Storage --------
 function loadFromStorage() {
   try {
     const txt = localStorage.getItem(STORAGE_KEY);
     if (!txt) return [];
     const parsed = JSON.parse(txt);
-    if (Array.isArray(parsed)) {
-      return parsed;
-    }
+    if (Array.isArray(parsed)) return parsed;
   } catch (e) {
     console.warn("Failed to parse stored data", e);
   }
@@ -149,7 +145,19 @@ function saveToStorage() {
   }
 }
 
-// ---- Dashboard calculations ----
+// -------- Utility: money parsing --------
+function parseMoney(value) {
+  if (value === null || value === undefined) return 0;
+  const s = String(value).trim();
+  if (s === "") return 0;
+
+  // Remove all characters except digits, decimal, minus
+  const cleaned = s.replace(/[^0-9.\-]/g, "");
+  const num = parseFloat(cleaned);
+  return isNaN(num) ? 0 : num;
+}
+
+// -------- Dashboard --------
 function refreshDashboard() {
   const daysEl = document.getElementById("days-since-charge");
   const totalExEl = document.getElementById("total-expenditure");
@@ -157,24 +165,23 @@ function refreshDashboard() {
   // Total Expenditures = Charging Fee + Parking Fee
   let total = 0;
   records.forEach(rec => {
-    const charging = Number(rec["Charging Fee"] || 0);
-    const parking = Number(rec["Parking Fee"] || 0);
-    if (!Number.isNaN(charging)) total += charging;
-    if (!Number.isNaN(parking)) total += parking;
+    const charging = parseMoney(rec["Charging Fee"]);
+    const parking = parseMoney(rec["Parking Fee"]);
+    total += charging + parking;
   });
   totalExEl.textContent = `Total Expenditures: $${total.toFixed(2)}`;
 
-  // Days since last fully charged
+  // Days since last Fully Charged = "Yes"
   let lastFullChargeDate = null;
   records.forEach(rec => {
-    if ((rec["Fully Charged"] || "").toString().toLowerCase() === "yes") {
+    const fc = (rec["Fully Charged"] || "").toString().toLowerCase().trim();
+    if (fc === "yes" || fc === "y") {
       const d = rec["Date"];
-      if (d) {
-        const dateObj = new Date(d);
-        if (!isNaN(dateObj)) {
-          if (!lastFullChargeDate || dateObj > lastFullChargeDate) {
-            lastFullChargeDate = dateObj;
-          }
+      if (!d) return;
+      const dateObj = new Date(d);
+      if (!isNaN(dateObj)) {
+        if (!lastFullChargeDate || dateObj > lastFullChargeDate) {
+          lastFullChargeDate = dateObj;
         }
       }
     }
@@ -186,12 +193,18 @@ function refreshDashboard() {
   }
 
   const today = new Date();
-  const diffMs = today.setHours(0,0,0,0) - lastFullChargeDate.setHours(0,0,0,0);
+  const startToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const last = new Date(
+    lastFullChargeDate.getFullYear(),
+    lastFullChargeDate.getMonth(),
+    lastFullChargeDate.getDate()
+  );
+  const diffMs = startToday - last;
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
   daysEl.textContent = `No. of Days of Last Fully Charged: ${diffDays} day(s)`;
 }
 
-// ---- Table rendering ----
+// -------- Table rendering --------
 function renderTable() {
   const container = document.getElementById("records-table-container");
   container.innerHTML = "";
@@ -201,14 +214,17 @@ function renderTable() {
 
   const thead = document.createElement("thead");
   const headerRow = document.createElement("tr");
+
   HEADERS.forEach(h => {
     const th = document.createElement("th");
     th.textContent = h;
     headerRow.appendChild(th);
   });
+
   const thAction = document.createElement("th");
   thAction.textContent = "Actions";
   headerRow.appendChild(thAction);
+
   thead.appendChild(headerRow);
   table.appendChild(thead);
 
@@ -241,16 +257,14 @@ function renderTable() {
   container.appendChild(table);
 }
 
-// ---- Form helpers ----
+// -------- Form helpers --------
 function clearForm() {
   const form = document.getElementById("entry-form");
   form.reset();
   const recordIdInput = document.getElementById("record-id");
   recordIdInput.value = "";
   const saveBtn = document.getElementById("save-btn");
-  if (saveBtn) {
-    saveBtn.textContent = "💾 Save New Entry";
-  }
+  if (saveBtn) saveBtn.textContent = "💾 Save New Entry";
 }
 
 function loadRecordIntoForm(index) {
@@ -259,34 +273,63 @@ function loadRecordIntoForm(index) {
 
   FIELD_IDS.forEach(field => {
     const el = document.getElementById(field.id);
-    if (el) {
-      el.value = record[field.key] ?? "";
-    }
+    if (el) el.value = record[field.key] ?? "";
   });
 
   const recordIdInput = document.getElementById("record-id");
   recordIdInput.value = String(index);
 
   const saveBtn = document.getElementById("save-btn");
-  if (saveBtn) {
-    saveBtn.textContent = "💾 Save Changes";
-  }
+  if (saveBtn) saveBtn.textContent = "💾 Save Changes";
 }
 
 function readFormToRecord() {
   const record = {};
   FIELD_IDS.forEach(field => {
     const el = document.getElementById(field.id);
-    if (el) {
-      record[field.key] = el.value ?? "";
-    } else {
-      record[field.key] = "";
-    }
+    record[field.key] = el ? el.value ?? "" : "";
   });
   return record;
 }
 
-// ---- Initial CSV loading (only when no saved data) ----
+// -------- Duration calculation --------
+function updateDurationFromTimes() {
+  const startEl = document.getElementById("input-Starting Time");
+  const endEl = document.getElementById("input-Ending Time");
+  const durEl = document.getElementById("input-Duratin");
+  if (!startEl || !endEl || !durEl) return;
+
+  const start = startEl.value;
+  const end = endEl.value;
+
+  if (!start || !end) {
+    durEl.value = "";
+    return;
+  }
+
+  const [sh, sm] = start.split(":").map(Number);
+  const [eh, em] = end.split(":").map(Number);
+  if ([sh, sm, eh, em].some(v => isNaN(v))) {
+    durEl.value = "";
+    return;
+  }
+
+  let startMinutes = sh * 60 + sm;
+  let endMinutes = eh * 60 + em;
+
+  // Handle overnight charging (end time next day)
+  if (endMinutes < startMinutes) {
+    endMinutes += 24 * 60;
+  }
+
+  const diff = endMinutes - startMinutes;
+  const hours = Math.floor(diff / 60);
+  const mins = diff % 60;
+
+  durEl.value = `${hours}:${mins.toString().padStart(2, "0")}`;
+}
+
+// -------- Initial CSV loading --------
 function tryLoadInitialCsv() {
   if (records.length > 0) {
     renderTable();
@@ -294,7 +337,6 @@ function tryLoadInitialCsv() {
     return;
   }
 
-  // On GitHub Pages this will work (same folder). On local "file://" it may fail; that's fine.
   fetch("initial_data.csv")
     .then(resp => {
       if (!resp.ok) {
@@ -305,7 +347,6 @@ function tryLoadInitialCsv() {
     .then(text => {
       const parsedRows = parseCsv(text);
       if (parsedRows && parsedRows.length > 0) {
-        // Ensure keys cover HEADERS
         records = parsedRows.map(row => {
           const normalized = {};
           HEADERS.forEach(h => {
@@ -317,7 +358,7 @@ function tryLoadInitialCsv() {
       }
     })
     .catch(err => {
-      console.info("Could not load initial_data.csv (this is fine on first use):", err);
+      console.info("Could not load initial_data.csv (first use is fine):", err);
     })
     .finally(() => {
       renderTable();
@@ -325,7 +366,7 @@ function tryLoadInitialCsv() {
     });
 }
 
-// ---- Downloads ----
+// -------- Downloads --------
 function downloadCsv(filename, includeBom) {
   if (!records || records.length === 0) {
     alert("No records to download yet.");
@@ -333,6 +374,7 @@ function downloadCsv(filename, includeBom) {
   }
   const csvText = buildCsv(records);
   const content = includeBom ? "\uFEFF" + csvText : csvText;
+
   const blob = new Blob([content], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);
 
@@ -345,12 +387,15 @@ function downloadCsv(filename, includeBom) {
   URL.revokeObjectURL(url);
 }
 
-// ---- Main setup ----
+// -------- Main setup --------
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("entry-form");
   const clearBtn = document.getElementById("clear-btn");
   const downloadCsvBtn = document.getElementById("download-csv-btn");
   const downloadGSheetBtn = document.getElementById("download-gsheet-btn");
+
+  const startTimeEl = document.getElementById("input-Starting Time");
+  const endTimeEl = document.getElementById("input-Ending Time");
 
   // Load existing data from localStorage
   records = loadFromStorage();
@@ -359,13 +404,26 @@ document.addEventListener("DOMContentLoaded", () => {
     renderTable();
     refreshDashboard();
   } else {
-    // Try to seed from initial_data.csv
     tryLoadInitialCsv();
   }
 
-  // Form submit handler (create or update)
+  // Update Duration when times change
+  if (startTimeEl) {
+    startTimeEl.addEventListener("change", updateDurationFromTimes);
+    startTimeEl.addEventListener("input", updateDurationFromTimes);
+  }
+  if (endTimeEl) {
+    endTimeEl.addEventListener("change", updateDurationFromTimes);
+    endTimeEl.addEventListener("input", updateDurationFromTimes);
+  }
+
+  // Form submit (create or update record)
   form.addEventListener("submit", (evt) => {
     evt.preventDefault();
+
+    // Ensure Duration is up to date before saving
+    updateDurationFromTimes();
+
     const recordIdInput = document.getElementById("record-id");
     const existingIndex = recordIdInput.value.trim();
     const newRecord = readFormToRecord();
@@ -377,7 +435,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!Number.isNaN(idx) && idx >= 0 && idx < records.length) {
         records[idx] = newRecord;
       } else {
-        // If index somehow invalid, just append
         records.push(newRecord);
       }
     }
@@ -389,14 +446,12 @@ document.addEventListener("DOMContentLoaded", () => {
     alert("Record saved.");
   });
 
-  // Clear form button
+  // Clear form
   if (clearBtn) {
-    clearBtn.addEventListener("click", () => {
-      clearForm();
-    });
+    clearBtn.addEventListener("click", () => clearForm());
   }
 
-  // Download buttons
+  // Downloads
   if (downloadCsvBtn) {
     downloadCsvBtn.addEventListener("click", () => {
       downloadCsv("tesla_maintenance_records.csv", false);
@@ -404,7 +459,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   if (downloadGSheetBtn) {
     downloadGSheetBtn.addEventListener("click", () => {
-      // Same CSV but with BOM to help Excel / Google Sheets detect UTF-8
       downloadCsv("tesla_maintenance_records_gsheets.csv", true);
     });
   }
