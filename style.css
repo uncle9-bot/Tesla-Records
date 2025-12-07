@@ -1,9 +1,14 @@
 :root {
-    --color-green: #4CAF50;         /* Stylish Green */
-    --color-deep-green: #2E8B57;    /* Deep Green */
-    --color-grey: #607D8B;          /* Grey */
+    --color-green: #4CAF50;
+    --color-deep-green: #2E8B57;
+    --color-grey: #607D8B;
     --color-light-grey: #f4f4f4;
     --color-text-dark: #333;
+    --color-duration-grey: #e0e0e0;
+}
+
+* {
+    box-sizing: border-box;
 }
 
 body {
@@ -14,112 +19,175 @@ body {
     color: var(--color-text-dark);
 }
 
+/* Container */
 .container {
-    max-width: 768px; /* Optimized for iPhone screens */
+    max-width: 960px;
     margin: 0 auto;
-    padding: 10px;
+    padding: 10px 12px 40px 12px;
 }
 
-/* --- Card Styles --- */
-.form-card, .actions-card, .dashboard, .records-list-section {
-    background: white;
-    padding: 15px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-}
-
-/* --- Dashboard Style --- */
+/* Dashboard */
 .dashboard {
-    background-color: var(--color-deep-green);
-    color: white;
+    background-color: white;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 0.95em;
+}
+
+.dashboard p {
+    margin: 0;
+}
+
+/* Form section */
+.form-section {
+    background-color: white;
+    border-radius: 8px;
+    padding: 14px 16px 18px 16px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    margin-bottom: 14px;
+}
+
+.form-section h2 {
+    margin-top: 0;
+    margin-bottom: 10px;
     font-size: 1.1em;
-    padding: 15px 20px;
     font-weight: bold;
 }
 
-/* --- Form Layout (Responsive Grid) --- */
+/* Form rows & groups */
 .form-row {
     display: flex;
+    flex-wrap: wrap;
     gap: 10px;
-    margin-bottom: 5px;
+    margin-bottom: 6px;
 }
 
 .form-group {
-    flex-grow: 1; 
-    margin-bottom: 10px;
-    min-width: 0; /* Ensures proper sizing in flex container */
+    flex: 1 1 0;
+    min-width: 160px;
+    display: flex;
+    flex-direction: column;
 }
 
 .form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-    color: var(--color-deep-green);
     font-size: 0.85em;
+    margin-bottom: 3px;
 }
 
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 8px 9px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 0.9em;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 50px;
+}
+
+/* Required field indicator */
 .required-field label::after {
     content: " *";
     color: red;
 }
 
-.form-group input, .form-group textarea, .form-group select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    box-sizing: border-box; /* Important for padding/width */
-    font-size: 1em;
+/* Location: 50% width compared with a full-width field */
+.location-half {
+    max-width: 50%;
 }
 
-/* --- Button Styles --- */
+/* Duration: grey, not editable look */
+.duration-group input {
+    background-color: var(--color-duration-grey);
+    color: #555;
+    cursor: not-allowed;
+}
+
+/* Buttons */
 .button-group {
     display: flex;
-    gap: 10px;
-    margin-top: 20px;
-    flex-wrap: wrap; /* Allows buttons to stack on smaller screens */
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.secondary-buttons {
+    margin-top: 6px;
 }
 
 .btn {
-    flex-grow: 1; 
-    padding: 12px 10px;
     border: none;
     border-radius: 6px;
-    color: white;
+    padding: 8px 12px;
+    font-size: 0.9em;
     cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.3s;
-    font-size: 1em;
-}
-
-.btn-deep-green {
-    background-color: var(--color-deep-green);
 }
 
 .btn-green {
     background-color: var(--color-green);
+    color: white;
+}
+
+.btn-green:hover {
+    background-color: var(--color-deep-green);
 }
 
 .btn-grey {
-    background-color: var(--color-grey);
+    background-color: #bbb;
+    color: white;
 }
 
-/* --- Records List Table --- */
+.btn-grey:hover {
+    background-color: #999;
+}
+
+/* Records table section */
 .records-list-section {
-    max-height: 50vh; 
-    overflow-y: auto; 
+    background-color: white;
+    border-radius: 8px;
+    padding: 10px 16px 12px 16px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
 }
 
+.records-list-section h3 {
+    margin: 0 0 6px 0;
+    font-size: 1em;
+}
+
+/* Table container is scrollable vertically */
+#records-table-container {
+    max-height: 420px;
+    overflow-y: auto;
+    border-top: 1px solid #eee;
+    margin-top: 6px;
+}
+
+/* Table */
 #records-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 0.85em;
-    table-layout: fixed; /* Ensures column widths are stable */
+    font-size: 0.8em;
+    table-layout: fixed;
 }
 
-#records-table th, #records-table td {
-    padding: 8px 5px;
+#records-table thead {
+    position: sticky;
+    top: 0;
+    background-color: #fafafa;
+    z-index: 1;
+}
+
+#records-table th,
+#records-table td {
+    padding: 6px 4px;
     text-align: left;
     border-bottom: 1px solid #eee;
     white-space: nowrap;
@@ -128,19 +196,38 @@ body {
 }
 
 #records-table th {
-    background-color: var(--color-light-grey);
-    position: sticky; 
-    top: 0;
     font-weight: bold;
-    color: var(--color-text-dark);
 }
 
+/* Amend button in table */
 .amend-btn {
-    background-color: #FFA500; 
+    background-color: #FFA500;
     color: white;
     border: none;
-    padding: 5px 8px;
+    padding: 4px 6px;
     border-radius: 3px;
     cursor: pointer;
-    font-size: 0.85em;
+    font-size: 0.75em;
+}
+
+.amend-btn:hover {
+    background-color: #e08f00;
+}
+
+/* Mobile tweaks */
+@media (max-width: 768px) {
+    .container {
+        padding: 6px;
+    }
+    .form-section,
+    .records-list-section {
+        padding: 10px 10px 12px 10px;
+    }
+    .form-row {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    .location-half {
+        max-width: 100%;
+    }
 }
