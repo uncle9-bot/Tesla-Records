@@ -265,9 +265,12 @@ function clearForm() {
 
   const saveBtn = document.getElementById("save-btn");
   if (saveBtn) saveBtn.textContent = "💾 Save New Entry";
+
+  // After clearing, ensure Full km is disabled (since Fully Charged unchecked)
+  updateFullKmEnabled();
 }
 
-// helper: interpret stored value as boolean
+// interpret stored value as boolean for checkbox
 function isTruthyYes(value) {
   if (value === null || value === undefined) return false;
   const s = String(value).trim().toLowerCase();
@@ -295,6 +298,9 @@ function loadRecordIntoForm(index) {
 
   const saveBtn = document.getElementById("save-btn");
   if (saveBtn) saveBtn.textContent = "💾 Save Changes";
+
+  // After loading a record, ensure Full km is correctly enabled/disabled
+  updateFullKmEnabled();
 }
 
 function readFormToRecord() {
@@ -366,7 +372,7 @@ function updateCalculatedFields() {
     return;
   }
 
-  // --- km added = Ending km - Starting km ---
+  // km added = Ending km - Starting km
   const startKm = parseFloat(startKmEl.value);
   const endKm   = parseFloat(endKmEl.value);
   let diffKm    = NaN;
@@ -378,12 +384,12 @@ function updateCalculatedFields() {
     kmAddedEl.value = "";
   }
 
-  // --- total fee = Charging Fee + Parking Fee ---
+  // total fee = Charging Fee + Parking Fee
   const chargingFee = parseMoney(chargingEl.value);
   const parkingFee  = parseMoney(parkingEl.value);
   const totalFee    = chargingFee + parkingFee;
 
-  // --- Cost per kW = totalFee / kWh added ---
+  // Cost per kW = totalFee / kWh added
   const kwh = parseFloat(kwhEl.value);
   if (!isNaN(kwh) && kwh !== 0) {
     costKwEl.value = (totalFee / kwh).toFixed(2);
@@ -391,11 +397,28 @@ function updateCalculatedFields() {
     costKwEl.value = "";
   }
 
-  // --- Cost per km = totalFee / km added ---
+  // Cost per km = totalFee / km added
   if (!isNaN(diffKm) && diffKm !== 0) {
     costKmEl.value = (totalFee / diffKm).toFixed(2);
   } else {
     costKmEl.value = "";
+  }
+}
+
+// -------- Enable/disable Full km based on Fully Charged --------
+function updateFullKmEnabled() {
+  const fullyChargedEl = document.getElementById("input-Fully Charged");
+  const fullKmEl       = document.getElementById("input-Full km");
+
+  if (!fullyChargedEl || !fullKmEl) return;
+
+  if (fullyChargedEl.checked) {
+    // Fully Charged = Yes → Full km can be entered
+    fullKmEl.disabled = false;
+  } else {
+    // Not fully charged → Full km disabled and cleared
+    fullKmEl.disabled = true;
+    fullKmEl.value = "";
   }
 }
 
@@ -504,7 +527,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const downloadGSheetBtn = document.getElementById("download-gsheet-btn");
 
   const startTimeEl = document.getElementById("input-Starting Time");
-  const endTimeEl = document.getElementById("input-Ending Time");
+  const endTimeEl   = document.getElementById("input-Ending Time");
+
+  // Fully Charged checkbox controls Full km enabled/disabled
+  const fullyChargedEl = document.getElementById("input-Fully Charged");
+  if (fullyChargedEl) {
+    fullyChargedEl.addEventListener("change", updateFullKmEnabled);
+    fullyChargedEl.addEventListener("input", updateFullKmEnabled);
+  }
 
   // Load from localStorage first
   records = loadFromStorage();
@@ -519,11 +549,11 @@ document.addEventListener("DOMContentLoaded", () => {
   // Update duration when times change
   if (startTimeEl) {
     startTimeEl.addEventListener("change", updateDurationFromTimes);
-    startTimeEl.addEventListener("input", updateDurationFromTimes);
+    startTimeEl.addEventListener("input",  updateDurationFromTimes);
   }
   if (endTimeEl) {
     endTimeEl.addEventListener("change", updateDurationFromTimes);
-    endTimeEl.addEventListener("input", updateDurationFromTimes);
+    endTimeEl.addEventListener("input",  updateDurationFromTimes);
   }
 
   // Auto-calc: km added, cost per kW, cost per km
@@ -541,6 +571,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // Ensure Full km correctly enabled/disabled on first load
+  updateFullKmEnabled();
+
   // Form submit (create/update)
   if (form) {
     form.addEventListener("submit", (evt) => {
@@ -549,6 +582,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // Ensure duration and calculated fields are updated
       updateDurationFromTimes();
       updateCalculatedFields();
+      updateFullKmEnabled();
 
       const recordIdInput = document.getElementById("record-id");
       const existingIndex = recordIdInput ? recordIdInput.value.trim() : "";
