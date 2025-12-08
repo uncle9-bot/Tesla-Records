@@ -351,6 +351,54 @@ function updateDurationFromTimes() {
   durEl.value = `${hours}:${mins.toString().padStart(2, "0")}`;
 }
 
+// -------- Auto-calculated fields: km added, cost per kW, cost per km --------
+function updateCalculatedFields() {
+  const startKmEl   = document.getElementById("input-Starting km");
+  const endKmEl     = document.getElementById("input-Ending km");
+  const kmAddedEl   = document.getElementById("input-km added");
+  const chargingEl  = document.getElementById("input-Charging Fee");
+  const parkingEl   = document.getElementById("input-Parking Fee");
+  const kwhEl       = document.getElementById("input-kWh added");
+  const costKwEl    = document.getElementById("input-$/kW");
+  const costKmEl    = document.getElementById("input-$/km");
+
+  if (!startKmEl || !endKmEl || !kmAddedEl || !chargingEl || !parkingEl || !kwhEl || !costKwEl || !costKmEl) {
+    return;
+  }
+
+  // --- km added = Ending km - Starting km ---
+  const startKm = parseFloat(startKmEl.value);
+  const endKm   = parseFloat(endKmEl.value);
+  let diffKm    = NaN;
+
+  if (!isNaN(startKm) && !isNaN(endKm)) {
+    diffKm = endKm - startKm;
+    kmAddedEl.value = diffKm.toFixed(2);
+  } else {
+    kmAddedEl.value = "";
+  }
+
+  // --- total fee = Charging Fee + Parking Fee ---
+  const chargingFee = parseMoney(chargingEl.value);
+  const parkingFee  = parseMoney(parkingEl.value);
+  const totalFee    = chargingFee + parkingFee;
+
+  // --- Cost per kW = totalFee / kWh added ---
+  const kwh = parseFloat(kwhEl.value);
+  if (!isNaN(kwh) && kwh !== 0) {
+    costKwEl.value = (totalFee / kwh).toFixed(2);
+  } else {
+    costKwEl.value = "";
+  }
+
+  // --- Cost per km = totalFee / km added ---
+  if (!isNaN(diffKm) && diffKm !== 0) {
+    costKmEl.value = (totalFee / diffKm).toFixed(2);
+  } else {
+    costKmEl.value = "";
+  }
+}
+
 // -------- Initial CSV loading --------
 function parseInitialCsv(text) {
   const lines = text.split(/\r?\n/).filter(l => l.trim() !== "");
@@ -478,13 +526,29 @@ document.addEventListener("DOMContentLoaded", () => {
     endTimeEl.addEventListener("input", updateDurationFromTimes);
   }
 
+  // Auto-calc: km added, cost per kW, cost per km
+  const startKmEl   = document.getElementById("input-Starting km");
+  const endKmEl     = document.getElementById("input-Ending km");
+  const chargingEl  = document.getElementById("input-Charging Fee");
+  const parkingEl   = document.getElementById("input-Parking Fee");
+  const kwhEl       = document.getElementById("input-kWh added");
+
+  const calcTriggerEls = [startKmEl, endKmEl, chargingEl, parkingEl, kwhEl];
+  calcTriggerEls.forEach(el => {
+    if (el) {
+      el.addEventListener("input",  updateCalculatedFields);
+      el.addEventListener("change", updateCalculatedFields);
+    }
+  });
+
   // Form submit (create/update)
   if (form) {
     form.addEventListener("submit", (evt) => {
       evt.preventDefault();
 
-      // Ensure duration is updated
+      // Ensure duration and calculated fields are updated
       updateDurationFromTimes();
+      updateCalculatedFields();
 
       const recordIdInput = document.getElementById("record-id");
       const existingIndex = recordIdInput ? recordIdInput.value.trim() : "";
