@@ -226,8 +226,8 @@ body {
 /* Bigger tick boxes for Fully Charged & Maintenance */
 .fg-fullycharged input[type="checkbox"],
 .fg-maintenance  input[type="checkbox"] {
-    width: 32px;   /* roughly double normal checkbox size */
-    height: 32px;
+    width: 24px;  
+    height: 24px;
 }
 
 /* Grey entry boxes: Duration, km added */
@@ -368,6 +368,7 @@ body {
         padding: 10px 10px 12px 10px;
     }
 }
+
 
 
 
