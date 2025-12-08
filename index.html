@@ -89,21 +89,22 @@
                     </div>
                 </div>
 
-                <!-- Row 6: Full km, Odometer, Fully Charged (tick) -->
-                <div class="form-row">
-                    <div class="form-group fg-fullkm">
-                        <label for="input-Full km">Full km</label>
-                        <input type="number" id="input-Full km">
-                    </div>
-                    <div class="form-group fg-odo">
-                        <label for="input-Odometer">Odometer</label>
-                        <input type="number" id="input-Odometer" step="0.01">
-                    </div>
-                    <div class="form-group fg-fullycharged">
-                        <label for="input-Fully Charged">Fully Charged</label>
-                        <input type="checkbox" id="input-Fully Charged">
-                    </div>
-                </div>
+                <!-- Row 6: Fully Charged (tick), Full km, Odometer -->
+<div class="form-row">
+    <div class="form-group fg-fullycharged">
+        <label for="input-Fully Charged">Fully Charged?</label>
+        <input type="checkbox" id="input-Fully Charged">
+    </div>
+    <div class="form-group fg-fullkm">
+        <label for="input-Full km">Full km</label>
+        <input type="number" id="input-Full km">
+    </div>
+    <div class="form-group fg-odo">
+        <label for="input-Odometer">Odometer</label>
+        <input type="number" id="input-Odometer" step="0.01">
+    </div>
+</div>
+
 
                 <!-- Row 7: Charging Fee, Parking Fee -->
                 <div class="form-row">
@@ -174,5 +175,6 @@
     <script src="script.js"></script>
 </body>
 </html>
+
 
 
