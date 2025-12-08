@@ -159,9 +159,11 @@ body {
     width: 70px;
 }
 
-/* Full km 70px */
-.fg-fullkm input {
-    width: 70px;
+/* When Full km is disabled, make it grey */
+.fg-fullkm input:disabled {
+    background-color: var(--color-duration-grey);
+    color: #555;
+    cursor: not-allowed;
 }
 
 /* Odometer 100px */
@@ -368,6 +370,7 @@ body {
         padding: 10px 10px 12px 10px;
     }
 }
+
 
 
 
