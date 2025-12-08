@@ -307,13 +307,15 @@ body {
     font-size: 1em;
 }
 
-/* Table container is scrollable vertically */
+/* Scrollable old records area (vertical + horizontal) */
 #records-table-container {
     max-height: 420px;
-    overflow-y: auto;
+    overflow-y: auto;   /* scroll up/down to see more rows */
+    overflow-x: auto;   /* scroll left/right to see more columns */
     border-top: 1px solid #eee;
     margin-top: 6px;
 }
+
 
 /* Table */
 #records-table {
@@ -335,9 +337,23 @@ body {
     padding: 6px 4px;
     text-align: left;
     border-bottom: 1px solid #eee;
-    white-space: nowrap;
-    overflow: hidden;
+
+    /* allow wrapping inside a cell */
+    white-space: normal;
+    word-break: break-word;
+
+    /* show at most 2 lines */
+    line-height: 1.2;
+    max-height: calc(1.2em * 2);   /* 2 lines */
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;         /* Safari / iOS support */
+    -webkit-box-orient: vertical;
+
+    overflow: hidden;              /* hide anything beyond 2 lines */
     text-overflow: ellipsis;
+}
+
 }
 
 #records-table th {
@@ -370,6 +386,7 @@ body {
         padding: 10px 10px 12px 10px;
     }
 }
+
 
 
 
