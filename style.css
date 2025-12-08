@@ -67,9 +67,9 @@ body {
     margin-bottom: 6px;
 }
 
+/* By default, groups size to content (we'll set widths per field) */
 .form-group {
-    flex: 1 1 0;
-    min-width: 160px;
+    flex: 0 0 auto;
     display: flex;
     flex-direction: column;
 }
@@ -82,16 +82,10 @@ body {
 .form-group input,
 .form-group textarea,
 .form-group select {
-    width: 100%;
-    padding: 8px 9px;
+    padding: 4px 6px;
     border: 1px solid #ccc;
     border-radius: 6px;
     font-size: 0.9em;
-}
-
-.form-group textarea {
-    resize: vertical;
-    min-height: 50px;
 }
 
 /* Required field indicator */
@@ -100,12 +94,119 @@ body {
     color: red;
 }
 
-/* Location half width */
-.location-half {
-    max-width: 50%;
+/* ----- EXACT WIDTHS ----- */
+
+/* Date 70px */
+.fg-date input {
+    width: 70px;
 }
 
-/* Duration read-only styles */
+/* Location 150px */
+.fg-location input {
+    width: 150px;
+}
+
+/* Starting Time 50px */
+.fg-start-time input {
+    width: 50px;
+}
+
+/* Ending Time 50px */
+.fg-end-time input {
+    width: 50px;
+}
+
+/* Duration 50px (read-only) */
+.fg-duration input {
+    width: 50px;
+}
+
+/* Starting km 30px */
+.fg-startkm input {
+    width: 30px;
+}
+
+/* Ending km 30px */
+.fg-endkm input {
+    width: 30px;
+}
+
+/* km added 30px */
+.fg-kmadded input {
+    width: 30px;
+}
+
+/* Claimed kW 30px */
+.fg-claimedkw input {
+    width: 30px;
+}
+
+/* Claimed Amp 30px */
+.fg-claimedamp input {
+    width: 30px;
+}
+
+/* km/hr 30px */
+.fg-kmhr input {
+    width: 30px;
+}
+
+/* kWh added 30px */
+.fg-kwhadded input {
+    width: 30px;
+}
+
+/* Full km 30px */
+.fg-fullkm input {
+    width: 30px;
+}
+
+/* Odometer 50px */
+.fg-odo input {
+    width: 50px;
+}
+
+/* Fully Charged 30px (select) */
+.fg-fullycharged select {
+    width: 30px;
+}
+
+/* Charging Fee 30px */
+.fg-chargingfee input {
+    width: 30px;
+}
+
+/* Parking Fee 30px */
+.fg-parkingfee input {
+    width: 30px;
+}
+
+/* Cost per kW 30px */
+.fg-costkw input {
+    width: 30px;
+}
+
+/* Cost per km 30px */
+.fg-costkm input {
+    width: 30px;
+}
+
+/* Maintenance 30px */
+.fg-maintenance input {
+    width: 30px;
+}
+
+/* Remarks: fill remaining */
+.fg-remarks {
+    flex: 1 1 auto;
+}
+
+.fg-remarks textarea {
+    width: 100%;
+    min-height: 60px;
+}
+
+/* Duration read-only look */
 .duration-group input {
     background-color: var(--color-duration-grey);
     color: #555;
@@ -227,7 +328,7 @@ body {
     background-color: #e08f00;
 }
 
-/* Mobile tweaks */
+/* Mobile tweaks (widths stay fixed; layout may wrap) */
 @media (max-width: 768px) {
     .container {
         padding: 6px;
@@ -236,8 +337,5 @@ body {
     .records-list-section,
     .actions-card {
         padding: 10px 10px 12px 10px;
-    }
-    .location-half {
-        max-width: 100%;
     }
 }
