@@ -54,7 +54,7 @@ const FIELD_IDS = [
 
 let records = [];
 
-// -------- CSV line parser (for commas, quotes, etc.) --------
+// -------- CSV line parser --------
 function parseCsvLine(line) {
   const result = [];
   let current = "";
@@ -89,7 +89,7 @@ function parseCsvLine(line) {
   return result;
 }
 
-// -------- Build CSV text from records --------
+// -------- Build CSV text --------
 function escapeCsvValue(value) {
   if (value === null || value === undefined) return "";
   const s = String(value);
@@ -107,7 +107,7 @@ function buildCsv(rows) {
   return [headerRow, ...bodyRows].join("\n");
 }
 
-// -------- Storage (localStorage) --------
+// -------- Storage --------
 function loadFromStorage() {
   try {
     const txt = localStorage.getItem(STORAGE_KEY);
@@ -128,7 +128,7 @@ function saveToStorage() {
   }
 }
 
-// -------- Money parsing (for Charging / Parking Fee) --------
+// -------- Money parsing --------
 function parseMoney(value) {
   if (value === null || value === undefined) return 0;
   const s = String(value).trim();
@@ -139,7 +139,7 @@ function parseMoney(value) {
   return isNaN(num) ? 0 : num;
 }
 
-// -------- Dashboard: total expenditures + days since last full charge --------
+// -------- Dashboard --------
 function refreshDashboard() {
   const daysEl =
     document.getElementById("days-since-charge") ||
@@ -153,32 +153,31 @@ function refreshDashboard() {
 
   // 1) Total Expenditures = Charging Fee + Parking Fee
   let total = 0;
+  let lastFullChargeDate = null;
+
   records.forEach(rec => {
     const charging = parseMoney(rec["Charging Fee"]);
     const parking = parseMoney(rec["Parking Fee"]);
     total += charging + parking;
+
+    const fc = (rec["Fully Charged"] || "").toString().toLowerCase().trim();
+    if (fc === "yes" || fc === "y") {
+      const dStr = rec["Date"];
+      if (!dStr) return;
+      const dObj = new Date(dStr);
+      if (!isNaN(dObj)) {
+        if (!lastFullChargeDate || dObj > lastFullChargeDate) {
+          lastFullChargeDate = dObj;
+        }
+      }
+    }
   });
 
   if (totalExEl) {
     totalExEl.textContent = `Total Expenditures: $${total.toFixed(2)}`;
   }
 
-  // 2) Days since last fully charged
-  let lastFullChargeDate = null;
-  records.forEach(rec => {
-    const fc = (rec["Fully Charged"] || "").toString().toLowerCase().trim();
-    if (fc === "yes" || fc === "y") {
-      const d = rec["Date"];
-      if (!d) return;
-      const dateObj = new Date(d);
-      if (!isNaN(dateObj)) {
-        if (!lastFullChargeDate || dateObj > lastFullChargeDate) {
-          lastFullChargeDate = dateObj;
-        }
-      }
-    }
-  });
-
+  // 2) Days since last fully charged, using TODAY as base
   if (!daysEl) return;
 
   if (!lastFullChargeDate) {
@@ -187,22 +186,18 @@ function refreshDashboard() {
   }
 
   const today = new Date();
-  const startToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const base = new Date(today.getFullYear(), today.getMonth(), today.getDate());
   const last = new Date(
     lastFullChargeDate.getFullYear(),
     lastFullChargeDate.getMonth(),
     lastFullChargeDate.getDate()
   );
-  let diffMs = startToday - last;
-  let diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
+  let diffMs = base - last;
+  let diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
   if (diffDays < 0) diffDays = 0;
 
-  if (diffDays === 0) {
-    daysEl.textContent = "No. of Days of Last Fully Charged: Today";
-  } else {
-    daysEl.textContent = `No. of Days of Last Fully Charged: ${diffDays} day(s)`;
-  }
+  daysEl.textContent = `No. of Days of Last Fully Charged: ${diffDays} day(s)`;
 }
 
 // -------- Table rendering --------
@@ -297,7 +292,7 @@ function readFormToRecord() {
   return record;
 }
 
-// -------- Duration calculation (auto) --------
+// -------- Duration calculation --------
 function updateDurationFromTimes() {
   const startEl = document.getElementById("input-Starting Time");
   const endEl = document.getElementById("input-Ending Time");
@@ -333,21 +328,21 @@ function updateDurationFromTimes() {
   durEl.value = `${hours}:${mins.toString().padStart(2, "0")}`;
 }
 
-// -------- Initial CSV loading (index-based, to handle your current file) --------
+// -------- Initial CSV loading --------
 function parseInitialCsv(text) {
   const lines = text.split(/\r?\n/).filter(l => l.trim() !== "");
   if (lines.length === 0) return [];
 
   let startIndex = 0;
   if (/^Date\s*,/i.test(lines[0])) {
-    startIndex = 1; // skip header row, even if it's slightly corrupted
+    startIndex = 1; // skip header row
   }
 
   const out = [];
 
   for (let i = startIndex; i < lines.length; i++) {
     const cols = parseCsvLine(lines[i]);
-    if (cols.length === 0 || !cols[0]) continue; // skip empty lines / no date
+    if (cols.length === 0 || !cols[0]) continue;
 
     const rec = {};
 
