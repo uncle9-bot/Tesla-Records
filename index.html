@@ -21,7 +21,7 @@
             <form id="entry-form">
                 <input type="hidden" id="record-id" value="">
 
-                <!-- Row 1: Date only -->
+                <!-- Row 1: Date -->
                 <div class="form-row">
                     <div class="form-group required-field fg-date">
                         <label for="input-Date">Date</label>
@@ -89,7 +89,7 @@
                     </div>
                 </div>
 
-                <!-- Row 6: Full km, Odometer, Fully Charged -->
+                <!-- Row 6: Full km, Odometer, Fully Charged (tick) -->
                 <div class="form-row">
                     <div class="form-group fg-fullkm">
                         <label for="input-Full km">Full km</label>
@@ -101,11 +101,7 @@
                     </div>
                     <div class="form-group fg-fullycharged">
                         <label for="input-Fully Charged">Fully Charged?</label>
-                        <select id="input-Fully Charged">
-                            <option value="">(blank)</option>
-                            <option value="No">No</option>
-                            <option value="Yes">Yes</option>
-                        </select>
+                        <input type="checkbox" id="input-Fully Charged">
                     </div>
                 </div>
 
@@ -133,11 +129,11 @@
                     </div>
                 </div>
 
-                <!-- Row 9: Maintenance -->
+                <!-- Row 9: Maintenance (tick) -->
                 <div class="form-row">
                     <div class="form-group fg-maintenance">
                         <label for="input-Maintenance">Maintenance</label>
-                        <input type="text" id="input-Maintenance">
+                        <input type="checkbox" id="input-Maintenance">
                     </div>
                 </div>
 
