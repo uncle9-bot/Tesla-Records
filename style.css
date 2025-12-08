@@ -67,7 +67,6 @@ body {
     margin-bottom: 6px;
 }
 
-/* By default, groups size to content (we'll set widths per field) */
 .form-group {
     flex: 0 0 auto;
     display: flex;
@@ -86,6 +85,7 @@ body {
     border: 1px solid #ccc;
     border-radius: 6px;
     font-size: 0.9em;
+    background-color: #ffffff; /* default white */
 }
 
 /* Required field indicator */
@@ -94,11 +94,11 @@ body {
     color: red;
 }
 
-/* ----- EXACT WIDTHS ----- */
+/* ----- EXACT WIDTHS (px) ----- */
 
-/* Date 70px */
+/* Date 150px */
 .fg-date input {
-    width: 70px;
+    width: 150px;
 }
 
 /* Location 150px */
@@ -106,97 +106,97 @@ body {
     width: 150px;
 }
 
-/* Starting Time 50px */
+/* Starting Time 70px */
 .fg-start-time input {
-    width: 50px;
+    width: 70px;
 }
 
-/* Ending Time 50px */
+/* Ending Time 70px */
 .fg-end-time input {
-    width: 50px;
+    width: 70px;
 }
 
-/* Duration 50px (read-only) */
+/* Duration 70px + grey */
 .fg-duration input {
-    width: 50px;
+    width: 70px;
 }
 
-/* Starting km 30px */
+/* Starting km 70px */
 .fg-startkm input {
-    width: 30px;
+    width: 70px;
 }
 
-/* Ending km 30px */
+/* Ending km 70px */
 .fg-endkm input {
-    width: 30px;
+    width: 70px;
 }
 
-/* km added 30px */
+/* km added 70px + grey */
 .fg-kmadded input {
-    width: 30px;
+    width: 70px;
 }
 
-/* Claimed kW 30px */
+/* Claimed kW 70px */
 .fg-claimedkw input {
-    width: 30px;
+    width: 70px;
 }
 
-/* Claimed Amp 30px */
+/* Claimed Amp 70px */
 .fg-claimedamp input {
-    width: 30px;
+    width: 70px;
 }
 
-/* km/hr 30px */
+/* km/hr 70px */
 .fg-kmhr input {
-    width: 30px;
+    width: 70px;
 }
 
-/* kWh added 30px */
+/* kWh added 70px */
 .fg-kwhadded input {
-    width: 30px;
+    width: 70px;
 }
 
-/* Full km 30px */
+/* Full km 70px */
 .fg-fullkm input {
-    width: 30px;
+    width: 70px;
 }
 
-/* Odometer 50px */
+/* Odometer 100px */
 .fg-odo input {
-    width: 50px;
+    width: 100px;
 }
 
-/* Fully Charged 30px (select) */
-.fg-fullycharged select {
-    width: 30px;
+/* Fully Charged 70px (checkbox container) */
+.fg-fullycharged input[type="checkbox"] {
+    width: 70px;
 }
 
-/* Charging Fee 30px */
+/* Charging Fee 70px */
 .fg-chargingfee input {
-    width: 30px;
+    width: 70px;
 }
 
-/* Parking Fee 30px */
+/* Parking Fee 70px */
 .fg-parkingfee input {
-    width: 30px;
+    width: 70px;
 }
 
-/* Cost per kW 30px */
+/* Cost per kW 70px */
 .fg-costkw input {
-    width: 30px;
+    width: 70px;
 }
 
-/* Cost per km 30px */
+/* Cost per km 70px */
 .fg-costkm input {
-    width: 30px;
+    width: 70px;
 }
 
-/* Maintenance 30px */
-.fg-maintenance input {
-    width: 30px;
+/* Maintenance 70px (checkbox container) */
+.fg-maintenance input[type="checkbox"] {
+    width: 70px;
 }
 
-/* Remarks: fill remaining */
+/* Remarks fills remaining */
 .fg-remarks {
     flex: 1 1 auto;
 }
@@ -206,9 +206,23 @@ body {
     min-height: 60px;
 }
 
+/* Colour rules */
+/* White entry boxes: Date, Starting Time, Ending Time, Fully Charged (default is white already) */
+.fg-date input,
+.fg-start-time input,
+.fg-end-time input,
+.fg-fullycharged input[type="checkbox"] {
+    background-color: #ffffff;
+}
+
+/* Grey entry boxes: Duration, km added */
+.duration-group input,
+.fg-kmadded input {
+    background-color: var(--color-duration-grey);
+}
+
 /* Duration read-only look */
 .duration-group input {
-    background-color: var(--color-duration-grey);
     color: #555;
     cursor: not-allowed;
 }
@@ -328,7 +342,7 @@ body {
     background-color: #e08f00;
 }
 
-/* Mobile tweaks (widths stay fixed; layout may wrap) */
+/* Mobile tweaks */
 @media (max-width: 768px) {
     .container {
         padding: 6px;
