@@ -101,7 +101,7 @@ body {
     width: 150px;
 }
 
-/* Location 205px */
+/* Location 250px */
 .fg-location input {
     width: 250px;
 }
@@ -116,7 +116,7 @@ body {
     width: 70px;
 }
 
-/* Duration 70px + grey */
+/* Duration 70px */
 .fg-duration input {
     width: 70px;
 }
@@ -159,6 +159,11 @@ body {
     width: 70px;
 }
 
+/* Full km 70px */
+.fg-fullkm input {
+    width: 70px;
+}
+
 /* When Full km is disabled, make it grey */
 .fg-fullkm input:disabled {
     background-color: var(--color-duration-grey);
@@ -171,9 +176,9 @@ body {
     width: 100px;
 }
 
-/* Fully Charged 70px (checkbox container) */
+/* Fully Charged checkbox container */
 .fg-fullycharged input[type="checkbox"] {
-    width: 70px;
+    width: 70px; /* base width; overridden by bigger checkbox rule below */
 }
 
 /* Charging Fee 70px */
@@ -202,9 +207,9 @@ body {
     cursor: not-allowed;
 }
 
-/* Maintenance 70px (checkbox container) */
+/* Maintenance checkbox container */
 .fg-maintenance input[type="checkbox"] {
-    width: 70px;
+    width: 70px; /* base width; overridden by bigger checkbox rule below */
 }
 
 /* Remarks fills remaining */
@@ -225,10 +230,11 @@ body {
 .fg-fullycharged input[type="checkbox"] {
     background-color: #ffffff;
 }
+
 /* Bigger tick boxes for Fully Charged & Maintenance */
 .fg-fullycharged input[type="checkbox"],
 .fg-maintenance  input[type="checkbox"] {
-    width: 24px;  
+    width: 24px;
     height: 24px;
 }
 
@@ -316,7 +322,6 @@ body {
     margin-top: 6px;
 }
 
-
 /* Table */
 #records-table {
     width: 100%;
@@ -332,6 +337,7 @@ body {
     z-index: 1;
 }
 
+/* Cells: wrap text and show at most 2 lines */
 #records-table th,
 #records-table td {
     padding: 6px 4px;
@@ -352,8 +358,6 @@ body {
 
     overflow: hidden;              /* hide anything beyond 2 lines */
     text-overflow: ellipsis;
-}
-
 }
 
 #records-table th {
@@ -386,9 +390,3 @@ body {
         padding: 10px 10px 12px 10px;
     }
 }
-
-
-
-
-
-
