@@ -161,7 +161,7 @@ function refreshDashboard() {
     total += charging + parking;
 
     const fc = (rec["Fully Charged"] || "").toString().toLowerCase().trim();
-    if (fc === "yes" || fc === "y") {
+    if (fc === "yes" || fc === "y" || fc === "✓" || fc === "true") {
       const dStr = rec["Date"];
       if (!dStr) return;
       const dObj = new Date(dStr);
@@ -267,13 +267,27 @@ function clearForm() {
   if (saveBtn) saveBtn.textContent = "💾 Save New Entry";
 }
 
+// helper: interpret stored value as boolean
+function isTruthyYes(value) {
+  if (value === null || value === undefined) return false;
+  const s = String(value).trim().toLowerCase();
+  if (!s) return false;
+  return s === "yes" || s === "y" || s === "true" || s === "✓";
+}
+
 function loadRecordIntoForm(index) {
   const record = records[index];
   if (!record) return;
 
   FIELD_IDS.forEach(field => {
     const el = document.getElementById(field.id);
-    if (el) el.value = record[field.key] ?? "";
+    if (!el) return;
+
+    if (el.type === "checkbox") {
+      el.checked = isTruthyYes(record[field.key]);
+    } else {
+      el.value = record[field.key] ?? "";
+    }
   });
 
   const recordIdInput = document.getElementById("record-id");
@@ -287,7 +301,16 @@ function readFormToRecord() {
   const record = {};
   FIELD_IDS.forEach(field => {
     const el = document.getElementById(field.id);
-    record[field.key] = el ? el.value ?? "" : "";
+    if (!el) {
+      record[field.key] = "";
+      return;
+    }
+
+    if (el.type === "checkbox") {
+      record[field.key] = el.checked ? "Yes" : "";
+    } else {
+      record[field.key] = el.value ?? "";
+    }
   });
   return record;
 }
