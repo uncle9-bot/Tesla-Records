@@ -266,7 +266,7 @@ function clearForm() {
   const saveBtn = document.getElementById("save-btn");
   if (saveBtn) saveBtn.textContent = "💾 Save New Entry";
 
-  // After clearing, ensure Full km is disabled (since Fully Charged unchecked)
+  // After clearing, ensure Full km is disabled (Fully Charged unchecked)
   updateFullKmEnabled();
 }
 
