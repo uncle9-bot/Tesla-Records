@@ -176,9 +176,9 @@ body {
     width: 100px;
 }
 
-/* Fully Charged checkbox container */
+/* Fully Charged checkbox container (base width) */
 .fg-fullycharged input[type="checkbox"] {
-    width: 70px; /* base width; overridden by bigger checkbox rule below */
+    width: 70px;
 }
 
 /* Charging Fee 70px */
@@ -207,9 +207,9 @@ body {
     cursor: not-allowed;
 }
 
-/* Maintenance checkbox container */
+/* Maintenance checkbox container (base width) */
 .fg-maintenance input[type="checkbox"] {
-    width: 70px; /* base width; overridden by bigger checkbox rule below */
+    width: 70px;
 }
 
 /* Remarks fills remaining */
@@ -231,13 +231,6 @@ body {
     background-color: #ffffff;
 }
 
-/* Bigger tick boxes for Fully Charged & Maintenance */
-.fg-fullycharged input[type="checkbox"],
-.fg-maintenance  input[type="checkbox"] {
-    width: 24px;
-    height: 24px;
-}
-
 /* Grey entry boxes: Duration, km added */
 .duration-group input,
 .fg-kmadded input {
@@ -248,6 +241,13 @@ body {
 .duration-group input {
     color: #555;
     cursor: not-allowed;
+}
+
+/* Bigger tick boxes for Fully Charged & Maintenance (double size) */
+.fg-fullycharged input[type="checkbox"],
+.fg-maintenance  input[type="checkbox"] {
+    width: 24px;
+    height: 24px;
 }
 
 /* Buttons */
@@ -327,7 +327,7 @@ body {
     width: 100%;
     border-collapse: collapse;
     font-size: 0.8em;
-    table-layout: fixed;
+    table-layout: fixed;           /* columns share the width */
 }
 
 #records-table thead {
@@ -337,8 +337,17 @@ body {
     z-index: 1;
 }
 
-/* Cells: wrap text and show at most 2 lines */
-#records-table th,
+/* Header cells – normal table headers */
+#records-table th {
+    padding: 6px 4px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+    white-space: normal;
+    word-break: break-word;
+    font-weight: bold;
+}
+
+/* Data cells: wrap text and show at most 2 lines */
 #records-table td {
     padding: 6px 4px;
     text-align: left;
@@ -358,10 +367,6 @@ body {
 
     overflow: hidden;              /* hide anything beyond 2 lines */
     text-overflow: ellipsis;
-}
-
-#records-table th {
-    font-weight: bold;
 }
 
 /* Amend button in table */
