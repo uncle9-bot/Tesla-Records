@@ -1,4 +1,4 @@
-Date,Location,Starting Time,Ending Time,Duration,Starting km,Ending km,km added,ClaimedkW,Claimed Amp,km/hr,kWh added,Fully Charged,Full km,Charging Fee,Parking Fee,$/kW,$/km,Odometer,Maintenance,Remarks
+Date,Location,Starting Time,Ending Time,Duration,Starting km,Ending km,km added,Claimed kW,Claimed Amp,km/hr,kWh added,Fully Charged,Full km,Charging Fee,Parking Fee,$/kW,$/km,Odometer,Maintenance,Remarks
 2024-02-20,Mai Po,13:25:00,14:35:00,01:10:00,,,,,32.0,,8.0,,,,,,,,,Delivery self pick-up at Tsing Yi Office.  Battery 80%
 2024-02-22,Olympian City,,,03:20:00,,,,11.0,,,28.0,Yes,435.0,,,,,,,Sentry Mode: 9hrs 15mins 15km
 2024-02-24,Olympian City,,,00:54:00,,,,11.0,,,8.0,,,,,,,,,
