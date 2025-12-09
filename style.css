@@ -316,13 +316,15 @@ body {
     border-top: 1px solid #eee;
     margin-top: 6px;
 }
-
 /* Table */
 #records-table {
-    width: 100%;
+    /* Make the table wider than the screen so each column has room,
+       and let the container scroll horizontally */
+    width: auto;
+    min-width: 1400px;          /* adjust bigger if you like, e.g. 1800px */
     border-collapse: collapse;
     font-size: 0.8em;
-    table-layout: fixed;           /* columns share the width */
+    table-layout: auto;         /* let columns size according to content */
 }
 
 #records-table thead {
@@ -332,17 +334,23 @@ body {
     z-index: 1;
 }
 
-/* Header cells – normal table headers */
-#records-table th {
-    padding: 6px 4px;
+/* Header & data cells */
+#records-table th,
+#records-table td {
+    padding: 6px 8px;
     text-align: left;
     border-bottom: 1px solid #eee;
-    white-space: normal;
-    word-break: break-word;
-    font-weight: bold;
-    background-color: var(--color-light-grey);
-    color: var(--color-text-dark);
+
+    /* keep on one line in each cell, cut with ... if too long */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
+
+#records-table th {
+    font-weight: bold;
+}
+
 
 /* Data cells: wrap text and show at most 2 lines */
 #records-table td {
@@ -388,3 +396,4 @@ body {
         padding: 10px 10px 12px 10px;
     }
 }
+
