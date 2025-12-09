@@ -3,20 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tesla Records</title>
+    <title>Tesla Maintenance Tracker</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
+        
         <!-- Dashboard -->
         <header class="dashboard">
-            <p id="days-since-charge">Last Fully Charged: Calculating...</p>
+            <p id="days-since-charge">No. of Days of Last Fully Charged: Calculating...</p>
             <p id="total-expenditure">Total Expenditures: $0.00</p>
         </header>
 
         <!-- Entry Form -->
         <section class="form-section">
-            <h2>Tesla Details</h2>
+            <h2>Tesla Charging &amp; Maintenance Entry</h2>
 
             <form id="entry-form">
                 <input type="hidden" id="record-id" value="">
@@ -48,7 +49,7 @@
                         <input type="time" id="input-Ending Time">
                     </div>
                     <div class="form-group duration-group fg-duration">
-                        <label for="input-Duratin">Duration</label>
+                        <label for="input-Duratin">Duration (auto)</label>
                         <input type="text" id="input-Duratin" readonly>
                     </div>
                 </div>
@@ -92,7 +93,7 @@
                 <!-- Row 6: Fully Charged, Full km, Odometer -->
                 <div class="form-row">
                     <div class="form-group fg-fullycharged">
-                        <label for="input-Fully Charged">Fully Charged</label>
+                        <label for="input-Fully Charged">Fully Charged?</label>
                         <input type="checkbox" id="input-Fully Charged">
                     </div>
                     <div class="form-group fg-fullkm">
@@ -108,11 +109,11 @@
                 <!-- Row 7: Charging Fee, Parking Fee -->
                 <div class="form-row">
                     <div class="form-group fg-chargingfee">
-                        <label for="input-Charging Fee">Charging Fee</label>
+                        <label for="input-Charging Fee">Charging Fee ($)</label>
                         <input type="number" id="input-Charging Fee" step="0.01">
                     </div>
                     <div class="form-group fg-parkingfee">
-                        <label for="input-Parking Fee">Parking Fee</label>
+                        <label for="input-Parking Fee">Parking Fee ($)</label>
                         <input type="number" id="input-Parking Fee" step="0.01">
                     </div>
                 </div>
@@ -120,11 +121,11 @@
                 <!-- Row 8: Cost per kW, Cost per km (auto) -->
                 <div class="form-row">
                     <div class="form-group fg-costkw">
-                        <label for="input-$/kW">Cost per kW</label>
+                        <label for="input-$/kW">Cost per kW ($/kW)</label>
                         <input type="number" id="input-$/kW" step="0.01" readonly>
                     </div>
                     <div class="form-group fg-costkm">
-                        <label for="input-$/km">Cost per km</label>
+                        <label for="input-$/km">Cost per km ($/km)</label>
                         <input type="number" id="input-$/km" step="0.01" readonly>
                     </div>
                 </div>
@@ -172,5 +173,3 @@
     <script src="script.js"></script>
 </body>
 </html>
-
-
