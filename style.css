@@ -324,7 +324,7 @@ body {
     min-width: 1400px;          /* adjust bigger if you like, e.g. 1800px */
     border-collapse: collapse;
     font-size: 0.8em;
-    table-layout: auto;         /* let columns size according to content */
+    table-layout: fixed;         /* let columns size according to content */
 }
 
 #records-table thead {
@@ -349,6 +349,19 @@ body {
 
 #records-table th {
     font-weight: bold;
+}
+
+/* Fixed widths for specific columns in All Maintenance Records */
+/* Column 1 = Date */
+#records-table th:nth-child(1),
+#records-table td:nth-child(1) {
+    width: 38px;
+}
+
+/* Column 2 = Location */
+#records-table th:nth-child(2),
+#records-table td:nth-child(2) {
+    width: 50px;
 }
 
 
@@ -396,4 +409,5 @@ body {
         padding: 10px 10px 12px 10px;
     }
 }
+
 
