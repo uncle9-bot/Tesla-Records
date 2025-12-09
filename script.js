@@ -46,6 +46,7 @@ const FIELD_IDS = [
   { id: "input-Charging Fee",  key: "Charging Fee" },
   { id: "input-Parking Fee",   key: "Parking Fee" },
   { id: "input-$/kW",          key: "$/kW" },
+<|diff_marker|> ADD A1000
   { id: "input-$/km",          key: "$/km" },
   { id: "input-Odometer",      key: "Odometer" },
   { id: "input-Maintenance",   key: "Maintenance" },
@@ -66,6 +67,7 @@ function parseCsvLine(line) {
     if (inQuotes) {
       if (ch === "\"") {
         if (i + 1 < line.length && line[i + 1] === "\"") {
+<|diff_marker|> ADD A1020
           current += "\"";
           i++;
         } else {
@@ -86,6 +88,7 @@ function parseCsvLine(line) {
     }
   }
   result.push(current);
+<|diff_marker|> ADD A1040
   return result;
 }
 
@@ -108,6 +111,7 @@ function buildCsv(rows) {
 }
 
 // -------- Storage --------
+<|diff_marker|> ADD A1060
 function loadFromStorage() {
   try {
     const txt = localStorage.getItem(STORAGE_KEY);
@@ -129,6 +133,7 @@ function saveToStorage() {
 }
 
 // -------- Money parsing --------
+<|diff_marker|> ADD A1080
 function parseMoney(value) {
   if (value === null || value === undefined) return 0;
   const s = String(value).trim();
@@ -149,6 +154,7 @@ function refreshDashboard() {
     document.getElementById("total-expenditure") ||
     document.getElementById("total-expenditures");
 
+<|diff_marker|> ADD A1100
   if (!daysEl && !totalExEl) return;
 
   // 1) Total Expenditures = Charging Fee + Parking Fee
@@ -169,6 +175,7 @@ function refreshDashboard() {
         if (!lastFullChargeDate || dObj > lastFullChargeDate) {
           lastFullChargeDate = dObj;
         }
+<|diff_marker|> ADD A1120
       }
     }
   });
@@ -189,6 +196,7 @@ function refreshDashboard() {
   const base = new Date(today.getFullYear(), today.getMonth(), today.getDate());
   const last = new Date(
     lastFullChargeDate.getFullYear(),
+<|diff_marker|> ADD A1140
     lastFullChargeDate.getMonth(),
     lastFullChargeDate.getDate()
   );
@@ -210,6 +218,7 @@ function renderTable() {
   const table = document.createElement("table");
   table.id = "records-table";
 
+<|diff_marker|> ADD A1160
   const thead = document.createElement("thead");
   const headerRow = document.createElement("tr");
 
@@ -231,6 +240,7 @@ function renderTable() {
   records.forEach((rec, idx) => {
     const tr = document.createElement("tr");
 
+<|diff_marker|> ADD A1180
     HEADERS.forEach(h => {
       const td = document.createElement("td");
       td.textContent = rec[h] ?? "";
@@ -251,376 +261,5 @@ function renderTable() {
     tbody.appendChild(tr);
   });
 
-  table.appendChild(tbody);
-  container.appendChild(table);
-}
 
-// -------- Form helpers --------
-function clearForm() {
-  const form = document.getElementById("entry-form");
-  if (form) form.reset();
-
-  const recordIdInput = document.getElementById("record-id");
-  if (recordIdInput) recordIdInput.value = "";
-
-  const saveBtn = document.getElementById("save-btn");
-  if (saveBtn) saveBtn.textContent = "💾 Save New Entry";
-
-  // After clearing, ensure Full km is disabled (Fully Charged unchecked)
-  updateFullKmEnabled();
-}
-
-// interpret stored value as boolean for checkbox
-function isTruthyYes(value) {
-  if (value === null || value === undefined) return false;
-  const s = String(value).trim().toLowerCase();
-  if (!s) return false;
-  return s === "yes" || s === "y" || s === "true" || s === "✓";
-}
-
-function loadRecordIntoForm(index) {
-  const record = records[index];
-  if (!record) return;
-
-  FIELD_IDS.forEach(field => {
-    const el = document.getElementById(field.id);
-    if (!el) return;
-
-    if (el.type === "checkbox") {
-      el.checked = isTruthyYes(record[field.key]);
-    } else {
-      el.value = record[field.key] ?? "";
-    }
-  });
-
-  const recordIdInput = document.getElementById("record-id");
-  if (recordIdInput) recordIdInput.value = String(index);
-
-  const saveBtn = document.getElementById("save-btn");
-  if (saveBtn) saveBtn.textContent = "💾 Save Changes";
-
-  // After loading a record, ensure Full km is correctly enabled/disabled
-  updateFullKmEnabled();
-}
-
-function readFormToRecord() {
-  const record = {};
-  FIELD_IDS.forEach(field => {
-    const el = document.getElementById(field.id);
-    if (!el) {
-      record[field.key] = "";
-      return;
-    }
-
-    if (el.type === "checkbox") {
-      record[field.key] = el.checked ? "Yes" : "";
-    } else {
-      record[field.key] = el.value ?? "";
-    }
-  });
-  return record;
-}
-
-// -------- Duration calculation --------
-function updateDurationFromTimes() {
-  const startEl = document.getElementById("input-Starting Time");
-  const endEl = document.getElementById("input-Ending Time");
-  const durEl = document.getElementById("input-Duratin");
-  if (!startEl || !endEl || !durEl) return;
-
-  const start = startEl.value;
-  const end = endEl.value;
-
-  if (!start || !end) {
-    durEl.value = "";
-    return;
-  }
-
-  const [sh, sm] = start.split(":").map(Number);
-  const [eh, em] = end.split(":").map(Number);
-  if ([sh, sm, eh, em].some(v => isNaN(v))) {
-    durEl.value = "";
-    return;
-  }
-
-  let startMinutes = sh * 60 + sm;
-  let endMinutes = eh * 60 + em;
-
-  if (endMinutes < startMinutes) {
-    endMinutes += 24 * 60;
-  }
-
-  const diff = endMinutes - startMinutes;
-  const hours = Math.floor(diff / 60);
-  const mins = diff % 60;
-
-  durEl.value = `${hours}:${mins.toString().padStart(2, "0")}`;
-}
-
-// -------- Auto-calculated fields: km added, cost per kW, cost per km --------
-function updateCalculatedFields() {
-  const startKmEl   = document.getElementById("input-Starting km");
-  const endKmEl     = document.getElementById("input-Ending km");
-  const kmAddedEl   = document.getElementById("input-km added");
-  const chargingEl  = document.getElementById("input-Charging Fee");
-  const parkingEl   = document.getElementById("input-Parking Fee");
-  const kwhEl       = document.getElementById("input-kWh added");
-  const costKwEl    = document.getElementById("input-$/kW");
-  const costKmEl    = document.getElementById("input-$/km");
-
-  if (!startKmEl || !endKmEl || !kmAddedEl || !chargingEl || !parkingEl || !kwhEl || !costKwEl || !costKmEl) {
-    return;
-  }
-
-  // km added = Ending km - Starting km
-  const startKm = parseFloat(startKmEl.value);
-  const endKm   = parseFloat(endKmEl.value);
-  let diffKm    = NaN;
-
-  if (!isNaN(startKm) && !isNaN(endKm)) {
-    diffKm = endKm - startKm;
-    kmAddedEl.value = diffKm.toFixed(2);
-  } else {
-    kmAddedEl.value = "";
-  }
-
-  // total fee = Charging Fee + Parking Fee
-  const chargingFee = parseMoney(chargingEl.value);
-  const parkingFee  = parseMoney(parkingEl.value);
-  const totalFee    = chargingFee + parkingFee;
-
-  // Cost per kW = totalFee / kWh added
-  const kwh = parseFloat(kwhEl.value);
-  if (!isNaN(kwh) && kwh !== 0) {
-    costKwEl.value = (totalFee / kwh).toFixed(2);
-  } else {
-    costKwEl.value = "";
-  }
-
-  // Cost per km = totalFee / km added
-  if (!isNaN(diffKm) && diffKm !== 0) {
-    costKmEl.value = (totalFee / diffKm).toFixed(2);
-  } else {
-    costKmEl.value = "";
-  }
-}
-
-// -------- Enable/disable Full km based on Fully Charged --------
-function updateFullKmEnabled() {
-  const fullyChargedEl = document.getElementById("input-Fully Charged");
-  const fullKmEl       = document.getElementById("input-Full km");
-
-  if (!fullyChargedEl || !fullKmEl) return;
-
-  if (fullyChargedEl.checked) {
-    // Fully Charged = Yes → Full km can be entered
-    fullKmEl.disabled = false;
-  } else {
-    // Not fully charged → Full km disabled and cleared
-    fullKmEl.disabled = true;
-    fullKmEl.value = "";
-  }
-}
-
-// -------- Initial CSV loading --------
-function parseInitialCsv(text) {
-  const lines = text.split(/\r?\n/).filter(l => l.trim() !== "");
-  if (lines.length === 0) return [];
-
-  let startIndex = 0;
-  if (/^Date\s*,/i.test(lines[0])) {
-    startIndex = 1; // skip header row
-  }
-
-  const out = [];
-
-  for (let i = startIndex; i < lines.length; i++) {
-    const cols = parseCsvLine(lines[i]);
-    if (cols.length === 0 || !cols[0]) continue;
-
-    const rec = {};
-
-    rec["Date"]          = cols[0]  || "";
-    rec["Location"]      = cols[1]  || "";
-    rec["Starting Time"] = cols[2]  || "";
-    rec["Ending Time"]   = cols[3]  || "";
-    rec["Duratin"]       = cols[4]  || "";
-    rec["Starting km"]   = cols[5]  || "";
-    rec["Ending km"]     = cols[6]  || "";
-    rec["km added"]      = cols[7]  || "";
-    rec["ClaimedkW"]     = cols[8]  || "";
-    rec["Claimed Amp"]   = cols[9]  || "";
-    rec["km/hr"]         = cols[10] || "";
-    rec["kWh added"]     = cols[11] || "";
-    rec["Fully Charged"] = cols[12] || "";
-    rec["Full km"]       = cols[13] || "";
-    rec["Charging Fee"]  = cols[14] || "";
-    rec["Parking Fee"]   = cols[15] || "";
-    rec["$/kW"]          = cols[16] || "";
-    rec["$/km"]          = cols[17] || "";
-    rec["Odometer"]      = cols[18] || "";
-    rec["Maintenance"]   = cols[19] || "";
-    rec["Remarks"]       = cols[20] || cols[21] || "";
-
-    out.push(rec);
-  }
-
-  return out;
-}
-
-function tryLoadInitialCsv() {
-  if (records.length > 0) {
-    renderTable();
-    refreshDashboard();
-    return;
-  }
-
-  fetch("initial_data.csv")
-    .then(resp => {
-      if (!resp.ok) {
-        throw new Error("No initial_data.csv or HTTP error");
-      }
-      return resp.text();
-    })
-    .then(text => {
-      const parsedRows = parseInitialCsv(text);
-      if (parsedRows && parsedRows.length > 0) {
-        records = parsedRows;
-        saveToStorage();
-      }
-    })
-    .catch(err => {
-      console.info("Could not load initial_data.csv (this is fine on very first use):", err);
-    })
-    .finally(() => {
-      renderTable();
-      refreshDashboard();
-    });
-}
-
-// -------- Downloads --------
-function downloadCsv(filename, includeBom) {
-  if (!records || records.length === 0) {
-    alert("No records to download yet.");
-    return;
-  }
-  const csvText = buildCsv(records);
-  const content = includeBom ? "\uFEFF" + csvText : csvText;
-
-  const blob = new Blob([content], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-}
-
-// -------- Main setup --------
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("entry-form");
-  const clearBtn = document.getElementById("clear-btn");
-  const downloadCsvBtn = document.getElementById("download-csv-btn");
-  const downloadGSheetBtn = document.getElementById("download-gsheet-btn");
-
-  const startTimeEl = document.getElementById("input-Starting Time");
-  const endTimeEl   = document.getElementById("input-Ending Time");
-
-  // Fully Charged checkbox controls Full km enabled/disabled
-  const fullyChargedEl = document.getElementById("input-Fully Charged");
-  if (fullyChargedEl) {
-    fullyChargedEl.addEventListener("change", updateFullKmEnabled);
-    fullyChargedEl.addEventListener("input", updateFullKmEnabled);
-  }
-
-  // Load from localStorage first
-  records = loadFromStorage();
-
-  if (records.length > 0) {
-    renderTable();
-    refreshDashboard();
-  } else {
-    tryLoadInitialCsv();
-  }
-
-  // Update duration when times change
-  if (startTimeEl) {
-    startTimeEl.addEventListener("change", updateDurationFromTimes);
-    startTimeEl.addEventListener("input",  updateDurationFromTimes);
-  }
-  if (endTimeEl) {
-    endTimeEl.addEventListener("change", updateDurationFromTimes);
-    endTimeEl.addEventListener("input",  updateDurationFromTimes);
-  }
-
-  // Auto-calc: km added, cost per kW, cost per km
-  const startKmEl   = document.getElementById("input-Starting km");
-  const endKmEl     = document.getElementById("input-Ending km");
-  const chargingEl  = document.getElementById("input-Charging Fee");
-  const parkingEl   = document.getElementById("input-Parking Fee");
-  const kwhEl       = document.getElementById("input-kWh added");
-
-  const calcTriggerEls = [startKmEl, endKmEl, chargingEl, parkingEl, kwhEl];
-  calcTriggerEls.forEach(el => {
-    if (el) {
-      el.addEventListener("input",  updateCalculatedFields);
-      el.addEventListener("change", updateCalculatedFields);
-    }
-  });
-
-  // Ensure Full km correctly enabled/disabled on first load
-  updateFullKmEnabled();
-
-  // Form submit (create/update)
-  if (form) {
-    form.addEventListener("submit", (evt) => {
-      evt.preventDefault();
-
-      // Ensure duration and calculated fields are updated
-      updateDurationFromTimes();
-      updateCalculatedFields();
-      updateFullKmEnabled();
-
-      const recordIdInput = document.getElementById("record-id");
-      const existingIndex = recordIdInput ? recordIdInput.value.trim() : "";
-      const newRecord = readFormToRecord();
-
-      if (existingIndex === "") {
-        records.push(newRecord);
-      } else {
-        const idx = Number(existingIndex);
-        if (!Number.isNaN(idx) && idx >= 0 && idx < records.length) {
-          records[idx] = newRecord;
-        } else {
-          records.push(newRecord);
-        }
-      }
-
-      saveToStorage();
-      renderTable();
-      refreshDashboard();
-      clearForm();
-      alert("Record saved.");
-    });
-  }
-
-  // Clear form
-  if (clearBtn) {
-    clearBtn.addEventListener("click", () => clearForm());
-  }
-
-  // Downloads
-  if (downloadCsvBtn) {
-    downloadCsvBtn.addEventListener("click", () => {
-      downloadCsv("tesla_maintenance_records.csv", false);
-    });
-  }
-  if (downloadGSheetBtn) {
-    downloadGSheetBtn.addEventListener("click", () => {
-      downloadCsv("tesla_maintenance_records_gsheets.csv", true);
-    });
-  }
-});
+::contentReference[oaicite:0]{index=0}
