@@ -88,13 +88,18 @@ body {
     background-color: #ffffff; /* default white */
 }
 
+.form-group textarea {
+    resize: vertical;
+    min-height: 50px;
+}
+
 /* Required field indicator */
 .required-field label::after {
     content: " *";
     color: red;
 }
 
-/* ----- EXACT WIDTHS (px) ----- */
+/* ----- EXACT WIDTHS FOR ENTRY FORM (px) ----- */
 
 /* Date 150px */
 .fg-date input {
@@ -106,14 +111,14 @@ body {
     width: 250px;
 }
 
-/* Starting Time 70px */
+/* Starting Time 100px */
 .fg-start-time input {
-    width: 70px;
+    width: 100px;
 }
 
-/* Ending Time 70px */
+/* Ending Time 100px */
 .fg-end-time input {
-    width: 70px;
+    width: 100px;
 }
 
 /* Duration 70px */
@@ -121,14 +126,14 @@ body {
     width: 70px;
 }
 
-/* Starting km 70px */
+/* Starting km 100px */
 .fg-startkm input {
-    width: 70px;
+    width: 100px;
 }
 
-/* Ending km 70px */
+/* Ending km 100px */
 .fg-endkm input {
-    width: 70px;
+    width: 100px;
 }
 
 /* km added 70px + grey + read-only look */
@@ -139,14 +144,14 @@ body {
     cursor: not-allowed;
 }
 
-/* Claimed kW 70px */
+/* Claimed kW 100px */
 .fg-claimedkw input {
-    width: 70px;
+    width: 100px;
 }
 
-/* Claimed Amp 70px */
+/* Claimed Amp 100px */
 .fg-claimedamp input {
-    width: 70px;
+    width: 100px;
 }
 
 /* km/hr 70px */
@@ -156,6 +161,11 @@ body {
 
 /* kWh added 70px */
 .fg-kwhadded input {
+    width: 70px;
+}
+
+/* Fully Charged checkbox container (base width) */
+.fg-fullycharged input[type="checkbox"] {
     width: 70px;
 }
 
@@ -176,10 +186,6 @@ body {
     width: 100px;
 }
 
-/* Fully Charged checkbox container (base width; actual visual size below) */
-.fg-fullycharged input[type="checkbox"] {
-    width: 70px;
-}
 
 /* Charging Fee 70px */
 .fg-chargingfee input {
@@ -308,6 +314,11 @@ body {
     box-shadow: 0 2px 4px rgba(0,0,0,0.08);
 }
 
+.records-list-section h3 {
+    margin: 0 0 6px 0;
+    font-size: 1em;
+}
+
 /* Scrollable old records area (vertical + horizontal) */
 #records-table-container {
     max-height: 420px;
@@ -316,15 +327,17 @@ body {
     border-top: 1px solid #eee;
     margin-top: 6px;
 }
-/* Table */
+
+/* All Maintenance Records table */
 #records-table {
-    /* Make the table wider than the screen so each column has room,
-       and let the container scroll horizontally */
-    width: auto;
-    min-width: 1400px;          /* adjust bigger if you like, e.g. 1800px */
     border-collapse: collapse;
     font-size: 0.8em;
-    table-layout: fixed;         /* let columns size according to content */
+
+    /* Let the content decide the width. If table is wider than screen,
+       the container's overflow-x will give a horizontal scrollbar. */
+    width: auto;
+    min-width: 100%;
+    table-layout: auto;
 }
 
 #records-table thead {
@@ -334,53 +347,27 @@ body {
     z-index: 1;
 }
 
-/* Header & data cells */
-#records-table th,
+/* Header cells – normal table headers */
+#records-table th {
+    padding: 6px 8px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+    white-space: nowrap;       /* keep header text on one line */
+    font-weight: bold;
+    background-color: var(--color-light-grey);
+    color: var(--color-text-dark);
+}
+
+/* Data cells – show entire content in one row */
 #records-table td {
     padding: 6px 8px;
     text-align: left;
     border-bottom: 1px solid #eee;
 
-    /* keep on one line in each cell, cut with ... if too long */
+    /* IMPORTANT: keep all text in a single line, table grows horizontally */
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-#records-table th {
-    font-weight: bold;
-}
-
-/* Fixed widths for specific columns in All Maintenance Records */
-/* Column 1 = Date */
-#records-table th:nth-child(1),
-#records-table td:nth-child(1) {
-    width: 38px;
-}
-
-/* Column 2 = Location */
-#records-table th:nth-child(2),
-#records-table td:nth-child(2) {
-    width: 50px;
-}
-
-
-/* Data cells: wrap text and show at most 2 lines */
-#records-table td {
-    padding: 6px 4px;
-    text-align: left;
-    border-bottom: 1px solid #eee;
-
-    /* allow wrapping inside a cell */
-    white-space: normal;
-    word-break: break-word;
-
-    /* show at most 2 lines */
-    line-height: 1.2;
-    max-height: calc(1.2em * 2);   /* 2 lines */
-
-    overflow: hidden;              /* hide anything beyond 2 lines */
-    text-overflow: ellipsis;
+    overflow: visible;    /* do not cut off text; width expands as needed */
+    text-overflow: clip;
 }
 
 /* Amend button in table */
@@ -409,5 +396,3 @@ body {
         padding: 10px 10px 12px 10px;
     }
 }
-
-
