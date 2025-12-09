@@ -101,19 +101,19 @@ body {
     width: 150px;
 }
 
-/* Location 250px */
+/* Location 300px */
 .fg-location input {
-    width: 250px;
+    width: 300px;
 }
 
-/* Starting Time 70px */
+/* Starting Time 100px */
 .fg-start-time input {
-    width: 70px;
+    width: 100px;
 }
 
-/* Ending Time 70px */
+/* Ending Time 100px */
 .fg-end-time input {
-    width: 70px;
+    width: 100px;
 }
 
 /* Duration 70px */
@@ -121,14 +121,14 @@ body {
     width: 70px;
 }
 
-/* Starting km 70px */
+/* Starting km 100px */
 .fg-startkm input {
-    width: 70px;
+    width: 100px;
 }
 
-/* Ending km 70px */
+/* Ending km 100px */
 .fg-endkm input {
-    width: 70px;
+    width: 100px;
 }
 
 /* km added 70px + grey + read-only look */
@@ -395,3 +395,4 @@ body {
         padding: 10px 10px 12px 10px;
     }
 }
+
