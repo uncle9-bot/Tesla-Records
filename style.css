@@ -333,11 +333,10 @@ body {
     border-collapse: collapse;
     font-size: 0.8em;
 
-    /* Let the content decide the width. If table is wider than screen,
-       the container's overflow-x will give a horizontal scrollbar. */
+    /* Each column ~120px, table scrolls horizontally if too wide */
     width: auto;
-    min-width: 100%;
-    table-layout: auto;
+    min-width: 120px;       /* baseline; real width comes from cells */
+    table-layout: fixed;    /* use fixed cell widths */
 }
 
 #records-table thead {
@@ -347,27 +346,41 @@ body {
     z-index: 1;
 }
 
-/* Header cells – normal table headers */
+/* Header cells – normal table headers with 120px width */
 #records-table th {
     padding: 6px 8px;
     text-align: left;
     border-bottom: 1px solid #eee;
-    white-space: nowrap;       /* keep header text on one line */
+
+    width: 120px;
+    max-width: 120px;
+
+    /* auto-wrap text to multiple lines */
+    white-space: normal;
+    word-wrap: break-word;
+    word-break: break-word;
+
     font-weight: bold;
     background-color: var(--color-light-grey);
     color: var(--color-text-dark);
 }
 
-/* Data cells – show entire content in one row */
+/* Data cells – 120px wide, auto-wrap contents */
 #records-table td {
     padding: 6px 8px;
     text-align: left;
     border-bottom: 1px solid #eee;
 
-    /* IMPORTANT: keep all text in a single line, table grows horizontally */
-    white-space: nowrap;
-    overflow: visible;    /* do not cut off text; width expands as needed */
-    text-overflow: clip;
+    width: 120px;
+    max-width: 120px;
+
+    /* allow multi-line text inside the cell */
+    white-space: normal;
+    word-wrap: break-word;
+    word-break: break-word;
+
+    overflow: hidden;          /* keep table neat if something is extreme */
+    text-overflow: ellipsis;
 }
 
 /* Amend button in table */
