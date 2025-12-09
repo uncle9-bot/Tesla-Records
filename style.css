@@ -181,14 +181,14 @@ body {
     width: 70px;
 }
 
-/* Charging Fee 70px */
+/* Charging Fee 100px */
 .fg-chargingfee input {
-    width: 70px;
+    width: 100px;
 }
 
-/* Parking Fee 70px */
+/* Parking Fee 100px */
 .fg-parkingfee input {
-    width: 70px;
+    width: 100px;
 }
 
 /* Cost per kW 70px + grey + read-only look */
@@ -395,4 +395,5 @@ body {
         padding: 10px 10px 12px 10px;
     }
 }
+
 
