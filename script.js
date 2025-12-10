@@ -343,7 +343,7 @@ function updateDurationFromTimes() {
   const diff = endMin - startMin;
   const hours = Math.floor(diff / 60);
   const mins = diff % 60;
-  durEl.value = `${hours}:${String(mins).padStart(2, "0")}:00`;
+  durEl.value = `${hours}:${String(mins).padStart(2, "0")}`;
 }
 
 function updateCalculatedFields() {
@@ -575,5 +575,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
 
 
