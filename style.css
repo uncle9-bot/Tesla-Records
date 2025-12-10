@@ -356,7 +356,7 @@ body {
     z-index: 5;
 }
 
-/* Header cells – 120px wide, left-aligned, same font/color as data */
+/* Header cells – 120px wide, left-aligned  */
 #records-table th {
     padding: 8px 8px;
     border-bottom: 1px solid #eee;
@@ -369,7 +369,7 @@ body {
     vertical-align: top;
 
     font-weight: normal;      /* same “weight feel” as body if you like */
-    background-color: #ffffff;
+    background-color: #FFD1EE;
     color: var(--color-text-dark);
 }
 
@@ -410,7 +410,7 @@ body {
 
 /* Amend button in table */
 .amend-btn {
-    background-color: #FFA500;
+    background-color: #FF0000;
     color: white;
     border: none;
     padding: 4px 6px;
@@ -434,5 +434,6 @@ body {
         padding: 10px 10px 12px 10px;
     }
 }
+
 
 
