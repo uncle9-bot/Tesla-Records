@@ -6,7 +6,7 @@
     --color-text-dark: #333;
     --color-duration-grey: #e0e0e0;
     --color-khaki: #EAFF80;
-    --color-light-yellow: #FFFFE6;
+    --color-blond: #FFFFB3;
 }
 
 * {
@@ -47,7 +47,7 @@ body {
 
 /* Form section */
 .form-section {
-    background-color: light-yellow;
+    background-color: blond;
     border-radius: 8px;
     padding: 14px 16px 18px 16px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.632);
@@ -434,4 +434,5 @@ body {
         padding: 10px 10px 12px 10px;
     }
 }
+
 
