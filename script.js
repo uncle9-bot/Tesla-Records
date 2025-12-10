@@ -8,7 +8,7 @@ const HEADERS = [
   "Location",
   "Starting Time",
   "Ending Time",
-  "Duratin",
+  "Duration",
   "Starting km",
   "Ending km",
   "km added",
@@ -33,7 +33,7 @@ const FIELD_IDS = [
   { id: "input-Location",      key: "Location" },
   { id: "input-Starting Time", key: "Starting Time" },
   { id: "input-Ending Time",   key: "Ending Time" },
-  { id: "input-Duratin",       key: "Duratin" },
+  { id: "input-Duration",       key: "Duration" },
   { id: "input-Starting km",   key: "Starting km" },
   { id: "input-Ending km",     key: "Ending km" },
   { id: "input-km added",      key: "km added" },
@@ -316,7 +316,7 @@ function readFormToRecord() {
 function updateDurationFromTimes() {
   const startEl = document.getElementById("input-Starting Time");
   const endEl = document.getElementById("input-Ending Time");
-  const durEl = document.getElementById("input-Duratin");
+  const durEl = document.getElementById("input-Duration");
   if (!startEl || !endEl || !durEl) return;
 
   const start = startEl.value;
@@ -575,4 +575,5 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
 
