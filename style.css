@@ -33,7 +33,7 @@ body {
     border-radius: 8px;
     padding: 12px 16px;
     margin-bottom: 12px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.632);
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -46,7 +46,7 @@ body {
 
 /* Form section */
 .form-section {
-    background-color: rgb(176, 243, 198);
+    background-color: white;
     border-radius: 8px;
     padding: 14px 16px 18px 16px;
     box-shadow: 0 2px 4px rgba(40, 178, 205, 0.853);
@@ -86,7 +86,7 @@ body {
     border: 1px solid #ccc;
     border-radius: 6px;
     font-size: 1em;
-    background-color: #c4edf3; /* default white */
+    background-color: #fcfcfc; /* default white */
 }
 
 .form-group textarea {
@@ -178,7 +178,7 @@ body {
 /* When Full km is disabled, make it grey */
 .fg-fullkm input:disabled {
     background-color: var(--color-duration-grey);
-    color: #555;
+    color: #000000;
     cursor: not-allowed;
 }
 
