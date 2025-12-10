@@ -168,7 +168,7 @@ function refreshDashboard() {
   });
 
   if (totalEl) {
-    totalEl.textContent = `Total Expenditures: $${total.toFixed(2)}`;
+    totalEl.textContent = `Total Expenditures: $${total.toFixed(0)}`;
   }
 
   if (!daysEl) return;
@@ -367,7 +367,7 @@ function updateCalculatedFields() {
 
   if (!isNaN(startKm) && !isNaN(endKm)) {
     diffKm = endKm - startKm;
-    kmAddedEl.value = diffKm.toFixed(2);
+    kmAddedEl.value = diffKm.toFixed(0);
   } else {
     kmAddedEl.value = "";
   }
@@ -387,7 +387,7 @@ function updateCalculatedFields() {
 
   // Cost per km = totalFee / km added
   if (!isNaN(diffKm) && diffKm !== 0) {
-    costKmEl.value = (totalFee / diffKm).toFixed(4);
+    costKmEl.value = (totalFee / diffKm).toFixed(2);
   } else {
     costKmEl.value = "";
   }
@@ -575,3 +575,4 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
