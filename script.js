@@ -191,7 +191,7 @@ function refreshDashboard() {
   if (diffDays < 0) diffDays = 0;
 
   daysEl.textContent =
-    "No. of Days of Last Fully Charged: " + diffDays + " day(s)";
+    "Last Fully Charged: " + diffDays + " day(s)";
 }
 
 // -------- Table rendering (latest at top) --------
