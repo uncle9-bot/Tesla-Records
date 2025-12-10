@@ -186,7 +186,6 @@ body {
     width: 100px;
 }
 
-
 /* Charging Fee 70px */
 .fg-chargingfee input {
     width: 70px;
@@ -319,68 +318,92 @@ body {
     font-size: 1em;
 }
 
-/* Scrollable old records area (vertical + horizontal) */
+/* === All Maintenance Records: scrollable container === */
 #records-table-container {
     max-height: 420px;
-    overflow-y: auto;   /* scroll up/down to see more rows */
-    overflow-x: auto;   /* scroll left/right to see more columns */
+    overflow-y: auto;        /* vertical scroll */
+    overflow-x: auto;        /* horizontal scroll */
+
+    /* iPhone / Safari friendly scrolling */
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    touch-action: pan-x pan-y;
+
     border-top: 1px solid #eee;
     margin-top: 6px;
 }
 
-/* All Maintenance Records table */
+/* === All Maintenance Records table === */
 #records-table {
-    border-collapse: collapse;
-    font-size: 0.8em;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 0.85em;       /* same font size for th & td */
+    color: var(--color-text-dark);
 
-    /* Each column ~120px, table scrolls horizontally if too wide */
-    width: auto;
-    min-width: 120px;       /* baseline; real width comes from cells */
-    table-layout: fixed;    /* use fixed cell widths */
+    width: 100%;
+    min-width: 1500px;       /* wider than screen; scrollbar will appear */
+    table-layout: fixed;     /* fixed column widths */
+    text-align: left;
+    background-color: #ffffff;
 }
 
+/* Sticky header row */
 #records-table thead {
     position: sticky;
     top: 0;
-    background-color: #fafafa;
-    z-index: 1;
+    z-index: 5;
 }
 
-/* Header cells – normal table headers with 120px width */
+/* Header cells – 120px wide, left-aligned, same font/color as data */
 #records-table th {
-    padding: 6px 8px;
-    text-align: left;
+    padding: 8px 8px;
     border-bottom: 1px solid #eee;
 
     width: 120px;
     max-width: 120px;
 
-    /* auto-wrap text to multiple lines */
     white-space: normal;
-    word-wrap: break-word;
     word-break: break-word;
+    vertical-align: top;
 
-    font-weight: bold;
-    background-color: var(--color-light-grey);
+    font-weight: normal;      /* same “weight feel” as body if you like */
+    background-color: #ffffff;
     color: var(--color-text-dark);
 }
 
 /* Data cells – 120px wide, auto-wrap contents */
 #records-table td {
-    padding: 6px 8px;
-    text-align: left;
+    padding: 8px 8px;
     border-bottom: 1px solid #eee;
 
     width: 120px;
     max-width: 120px;
 
-    /* allow multi-line text inside the cell */
     white-space: normal;
-    word-wrap: break-word;
     word-break: break-word;
+    vertical-align: top;
 
-    overflow: hidden;          /* keep table neat if something is extreme */
+    overflow: hidden;
     text-overflow: ellipsis;
+
+    font-size: 1em;           /* same as header because inherited */
+    color: var(--color-text-dark);
+}
+
+/* Keep text left in all cells */
+#records-table th,
+#records-table td {
+    text-align: left;
+}
+
+/* Optional: subtle zebra striping (remove if you want pure white) */
+#records-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Hover highlight (optional; comment out if you don’t want it) */
+#records-table tbody tr:hover {
+    background-color: #E5F2FF;
 }
 
 /* Amend button in table */
@@ -391,7 +414,7 @@ body {
     padding: 4px 6px;
     border-radius: 3px;
     cursor: pointer;
-    font-size: 0.75em;
+    font-size: 0.8em;
 }
 
 .amend-btn:hover {
