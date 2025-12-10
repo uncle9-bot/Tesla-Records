@@ -1,9 +1,8 @@
-// Tesla Maintenance Tracker - JavaScript
+// Tesla Maintenance Tracker - Logic
 
 const STORAGE_KEY = "teslaMaintenanceRecords_v3";
 
-// Column order used for objects and exported CSV.
-// Must match the columns in initial_data.csv.
+// Column order used for JS objects and exported CSV
 const HEADERS = [
   "Date",
   "Location",
@@ -55,8 +54,7 @@ const FIELD_IDS = [
 
 let records = [];
 
-// ---------------- CSV helpers ----------------
-
+// -------- CSV helpers --------
 function parseCsvLine(line) {
   const result = [];
   let current = "";
@@ -66,9 +64,9 @@ function parseCsvLine(line) {
     const ch = line[i];
 
     if (inQuotes) {
-      if (ch === '"') {
-        if (i + 1 < line.length && line[i + 1] === '"') {
-          current += '"';
+      if (ch === "\"") {
+        if (i + 1 < line.length && line[i + 1] === "\"") {
+          current += "\"";
           i++;
         } else {
           inQuotes = false;
@@ -77,7 +75,7 @@ function parseCsvLine(line) {
         current += ch;
       }
     } else {
-      if (ch === '"') {
+      if (ch === "\"") {
         inQuotes = true;
       } else if (ch === ",") {
         result.push(current);
@@ -108,18 +106,17 @@ function buildCsv(rows) {
   return [headerRow, ...bodyRows].join("\n");
 }
 
-// ---------------- Storage ----------------
-
+// -------- Storage --------
 function loadFromStorage() {
   try {
     const txt = localStorage.getItem(STORAGE_KEY);
     if (!txt) return [];
     const parsed = JSON.parse(txt);
-    return Array.isArray(parsed) ? parsed : [];
+    if (Array.isArray(parsed)) return parsed;
   } catch (e) {
     console.warn("Failed to parse stored data", e);
-    return [];
   }
+  return [];
 }
 
 function saveToStorage() {
@@ -130,8 +127,7 @@ function saveToStorage() {
   }
 }
 
-// ---------------- Money & dashboard ----------------
-
+// -------- Money & dashboard --------
 function parseMoney(value) {
   if (value === null || value === undefined) return 0;
   const s = String(value).trim();
@@ -145,6 +141,7 @@ function refreshDashboard() {
   const daysEl =
     document.getElementById("days-since-charge") ||
     document.getElementById("days-since-charged");
+
   const totalEl =
     document.getElementById("total-expenditure") ||
     document.getElementById("total-expenditures");
@@ -197,8 +194,7 @@ function refreshDashboard() {
     "No. of Days of Last Fully Charged: " + diffDays + " day(s)";
 }
 
-// ---------------- Table rendering ----------------
-
+// -------- Table rendering (latest at top) --------
 function renderTable() {
   const container = document.getElementById("records-table-container");
   if (!container) return;
@@ -226,7 +222,9 @@ function renderTable() {
 
   const tbody = document.createElement("tbody");
 
-  records.forEach((rec, idx) => {
+  // 🔽 latest at top: iterate records from end to start
+  for (let i = records.length - 1; i >= 0; i--) {
+    const rec = records[i];
     const tr = document.createElement("tr");
 
     HEADERS.forEach(h => {
@@ -240,21 +238,20 @@ function renderTable() {
     amendBtn.textContent = "Amend";
     amendBtn.className = "amend-btn";
     amendBtn.addEventListener("click", () => {
-      loadRecordIntoForm(idx);
+      loadRecordIntoForm(i);
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
     tdAction.appendChild(amendBtn);
     tr.appendChild(tdAction);
 
     tbody.appendChild(tr);
-  });
+  }
 
   table.appendChild(tbody);
   container.appendChild(table);
 }
 
-// ---------------- Form helpers ----------------
-
+// -------- Form helpers --------
 function clearForm() {
   const form = document.getElementById("entry-form");
   if (form) form.reset();
@@ -315,9 +312,8 @@ function readFormToRecord() {
   return record;
 }
 
-// ---------------- Calculations ----------------
-
-function calculateDuration() {
+// -------- Calculations --------
+function updateDurationFromTimes() {
   const startEl = document.getElementById("input-Starting Time");
   const endEl = document.getElementById("input-Ending Time");
   const durEl = document.getElementById("input-Duratin");
@@ -347,53 +343,51 @@ function calculateDuration() {
   const diff = endMin - startMin;
   const hours = Math.floor(diff / 60);
   const mins = diff % 60;
-  durEl.value = hours + ":" + String(mins).padStart(2, "0") + ":00";
+  durEl.value = `${hours}:${String(mins).padStart(2, "0")}:00`;
 }
 
-function calculateKmAdded() {
-  const startKmEl = document.getElementById("input-Starting km");
-  const endKmEl = document.getElementById("input-Ending km");
-  const kmAddedEl = document.getElementById("input-km added");
-  if (!startKmEl || !endKmEl || !kmAddedEl) return;
+function updateCalculatedFields() {
+  const startKmEl   = document.getElementById("input-Starting km");
+  const endKmEl     = document.getElementById("input-Ending km");
+  const kmAddedEl   = document.getElementById("input-km added");
+  const chargingEl  = document.getElementById("input-Charging Fee");
+  const parkingEl   = document.getElementById("input-Parking Fee");
+  const kwhEl       = document.getElementById("input-kWh added");
+  const costKwEl    = document.getElementById("input-$/kW");
+  const costKmEl    = document.getElementById("input-$/km");
 
+  if (!startKmEl || !endKmEl || !kmAddedEl || !chargingEl || !parkingEl || !kwhEl || !costKwEl || !costKmEl) {
+    return;
+  }
+
+  // km added = Ending km - Starting km
   const startKm = parseFloat(startKmEl.value);
-  const endKm = parseFloat(endKmEl.value);
+  const endKm   = parseFloat(endKmEl.value);
+  let diffKm    = NaN;
 
-  if (isNaN(startKm) || isNaN(endKm)) {
+  if (!isNaN(startKm) && !isNaN(endKm)) {
+    diffKm = endKm - startKm;
+    kmAddedEl.value = diffKm.toFixed(2);
+  } else {
     kmAddedEl.value = "";
-    return;
   }
 
-  const diff = endKm - startKm;
-  kmAddedEl.value = diff.toFixed(2);
-}
+  // total fee = Charging Fee + Parking Fee
+  const chargingFee = parseMoney(chargingEl.value);
+  const parkingFee  = parseMoney(parkingEl.value);
+  const totalFee    = chargingFee + parkingFee;
 
-function calculateCosts() {
-  const chargingEl = document.getElementById("input-Charging Fee");
-  const parkingEl = document.getElementById("input-Parking Fee");
-  const kwhEl = document.getElementById("input-kWh added");
-  const kmAddedEl = document.getElementById("input-km added");
-  const costKwEl = document.getElementById("input-$/kW");
-  const costKmEl = document.getElementById("input-$/km");
-
-  if (!chargingEl || !parkingEl || !kwhEl || !kmAddedEl || !costKwEl || !costKmEl) {
-    return;
-  }
-
-  const charging = parseMoney(chargingEl.value);
-  const parking = parseMoney(parkingEl.value);
-  const total = charging + parking;
-
+  // Cost per kW = totalFee / kWh added
   const kwh = parseFloat(kwhEl.value);
   if (!isNaN(kwh) && kwh !== 0) {
-    costKwEl.value = (total / kwh).toFixed(2);
+    costKwEl.value = (totalFee / kwh).toFixed(2);
   } else {
     costKwEl.value = "";
   }
 
-  const kmAdded = parseFloat(kmAddedEl.value);
-  if (!isNaN(kmAdded) && kmAdded !== 0) {
-    costKmEl.value = (total / kmAdded).toFixed(4);
+  // Cost per km = totalFee / km added
+  if (!isNaN(diffKm) && diffKm !== 0) {
+    costKmEl.value = (totalFee / diffKm).toFixed(4);
   } else {
     costKmEl.value = "";
   }
@@ -413,8 +407,7 @@ function updateFullKmEnabled() {
   }
 }
 
-// ---------------- Initial CSV loading ----------------
-
+// -------- Initial CSV loading --------
 function parseInitialCsv(text) {
   const lines = text.split(/\r?\n/).filter(l => l.trim() !== "");
   if (lines.length === 0) return [];
@@ -462,8 +455,7 @@ function tryLoadInitialCsv() {
     });
 }
 
-// ---------------- Downloads ----------------
-
+// -------- Downloads --------
 function downloadCsv(filename, includeBom) {
   if (!records || records.length === 0) {
     alert("No records to download yet.");
@@ -484,8 +476,7 @@ function downloadCsv(filename, includeBom) {
   URL.revokeObjectURL(url);
 }
 
-// ---------------- Main setup ----------------
-
+// -------- Main setup --------
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("entry-form");
   const clearBtn = document.getElementById("clear-btn");
@@ -501,40 +492,28 @@ document.addEventListener("DOMContentLoaded", () => {
     tryLoadInitialCsv();
   }
 
-  // Auto-calculations
+  // Duration auto calc
   const startTimeEl = document.getElementById("input-Starting Time");
   const endTimeEl = document.getElementById("input-Ending Time");
   if (startTimeEl) {
-    startTimeEl.addEventListener("change", calculateDuration);
-    startTimeEl.addEventListener("input", calculateDuration);
+    startTimeEl.addEventListener("change", updateDurationFromTimes);
+    startTimeEl.addEventListener("input", updateDurationFromTimes);
   }
   if (endTimeEl) {
-    endTimeEl.addEventListener("change", calculateDuration);
-    endTimeEl.addEventListener("input", calculateDuration);
+    endTimeEl.addEventListener("change", updateDurationFromTimes);
+    endTimeEl.addEventListener("input", updateDurationFromTimes);
   }
 
-  const startKmEl = document.getElementById("input-Starting km");
-  const endKmEl = document.getElementById("input-Ending km");
-  if (startKmEl) {
-    startKmEl.addEventListener("input", () => {
-      calculateKmAdded();
-      calculateCosts();
-    });
-  }
-  if (endKmEl) {
-    endKmEl.addEventListener("input", () => {
-      calculateKmAdded();
-      calculateCosts();
-    });
-  }
-
-  const chargingEl = document.getElementById("input-Charging Fee");
-  const parkingEl = document.getElementById("input-Parking Fee");
-  const kwhEl = document.getElementById("input-kWh added");
-  [chargingEl, parkingEl, kwhEl].forEach(el => {
+  // Calculated fields auto updates
+  const startKmEl   = document.getElementById("input-Starting km");
+  const endKmEl     = document.getElementById("input-Ending km");
+  const chargingEl  = document.getElementById("input-Charging Fee");
+  const parkingEl   = document.getElementById("input-Parking Fee");
+  const kwhEl       = document.getElementById("input-kWh added");
+  [startKmEl, endKmEl, chargingEl, parkingEl, kwhEl].forEach(el => {
     if (el) {
-      el.addEventListener("input", calculateCosts);
-      el.addEventListener("change", calculateCosts);
+      el.addEventListener("input",  updateCalculatedFields);
+      el.addEventListener("change", updateCalculatedFields);
     }
   });
 
@@ -546,14 +525,13 @@ document.addEventListener("DOMContentLoaded", () => {
     updateFullKmEnabled(); // initial state
   }
 
-  // Form submit
+  // Form submit (create/update)
   if (form) {
     form.addEventListener("submit", e => {
       e.preventDefault();
 
-      calculateDuration();
-      calculateKmAdded();
-      calculateCosts();
+      updateDurationFromTimes();
+      updateCalculatedFields();
       updateFullKmEnabled();
 
       const recordIdInput = document.getElementById("record-id");
@@ -580,12 +558,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Clear form button
+  // Clear form
   if (clearBtn) {
     clearBtn.addEventListener("click", () => clearForm());
   }
 
-  // Download buttons
+  // Downloads
   if (downloadCsvBtn) {
     downloadCsvBtn.addEventListener("click", () => {
       downloadCsv("tesla_maintenance_records.csv", false);
