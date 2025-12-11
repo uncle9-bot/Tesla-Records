@@ -6,7 +6,7 @@
     --color-text-dark: #333;
     --color-duration-grey: #e0e0e0;
     --color-khaki: #EAFF80;
-    --color-blond: #FFFFB3;
+    --color-blond: #FAF0BE;
     --color-papayawhip: #FFEFD5;
 }
 
@@ -279,11 +279,11 @@ body {
 }
 
 .btn-green {
-    background-color: var(--color-green);
+    background-color: var(--color-blond);
 }
 
 .btn-green:hover {
-    background-color: var(--color-deep-green);
+    background-color: var(--color-blond);
 }
 
 .btn-grey {
@@ -437,6 +437,7 @@ body {
         padding: 10px 10px 12px 10px;
     }
 }
+
 
 
 
