@@ -8,6 +8,8 @@
     --color-khaki: #EAFF80;
     --color-blond: #FAF0BE;
     --color-papayawhip: #FFEFD5;
+    --color-screamin-green: #80FF80;
+    
 }
 
 * {
@@ -279,7 +281,7 @@ body {
 }
 
 .btn-green {
-    background-color: var(--color-blond);
+    background-color: var(--color-screamingreen);
 }
 
 .btn-green:hover {
@@ -437,6 +439,7 @@ body {
         padding: 10px 10px 12px 10px;
     }
 }
+
 
 
 
