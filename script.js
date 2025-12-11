@@ -12,7 +12,7 @@ const HEADERS = [
   "Starting km",
   "Ending km",
   "km added",
-  "ClaimedkW",
+  "Claimed kW",
   "Claimed Amp",
   "km/hr",
   "kWh added",
@@ -37,7 +37,7 @@ const FIELD_IDS = [
   { id: "input-Starting km",   key: "Starting km" },
   { id: "input-Ending km",     key: "Ending km" },
   { id: "input-km added",      key: "km added" },
-  { id: "input-ClaimedkW",     key: "ClaimedkW" },
+  { id: "input-Claimed kW",     key: "Claimed kW" },
   { id: "input-Claimed Amp",   key: "Claimed Amp" },
   { id: "input-km/hr",         key: "km/hr" },
   { id: "input-kWh added",     key: "kWh added" },
@@ -575,6 +575,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
 
 
 
