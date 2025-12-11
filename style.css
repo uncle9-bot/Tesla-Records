@@ -374,6 +374,18 @@ body {
     color: var(--color-text-dark);
 }
 
+
+/* Amend button in table */
+.amend-btn {
+    background-color: #FF0000;
+    color: white;
+    border: none;
+    padding: 4px 6px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.8em;
+}
+    
 /* Data cells – 120px wide, auto-wrap contents */
 #records-table td {
     padding: 8px 8px;
@@ -407,17 +419,7 @@ body {
 /* Hover highlight (optional; comment out if you don’t want it) */
 #records-table tbody tr:hover {
     background-color: #E5F2FF;
-}
 
-/* Amend button in table */
-.amend-btn {
-    background-color: #FF0000;
-    color: white;
-    border: none;
-    padding: 4px 6px;
-    border-radius: 3px;
-    cursor: pointer;
-    font-size: 0.8em;
 }
 
 .amend-btn:hover {
@@ -435,6 +437,7 @@ body {
         padding: 10px 10px 12px 10px;
     }
 }
+
 
 
 
