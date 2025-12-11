@@ -7,6 +7,7 @@
     --color-duration-grey: #e0e0e0;
     --color-khaki: #EAFF80;
     --color-blond: #FFFFB3;
+    --color-papaya-whip: #FFEFD5;
 }
 
 * {
@@ -47,7 +48,7 @@ body {
 
 /* Form section */
 .form-section {
-    background-color: blond;
+    background-color: papaya whip;
     border-radius: 8px;
     padding: 14px 16px 18px 16px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.632);
@@ -434,6 +435,7 @@ body {
         padding: 10px 10px 12px 10px;
     }
 }
+
 
 
 
