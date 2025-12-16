@@ -391,21 +391,30 @@ function updateCalculatedFields() {
   } else {
     costKmEl.value = "";
   }
+  
+  // keep Full km synced if "Full" is ticked
+  updateFullKmEnabled();
 }
 
-// Enable/disable Full km based on Fully Charged
+// Keep Full km read-only & in sync with Ending km when "Full" is ticked
 function updateFullKmEnabled() {
-  const fcEl = document.getElementById("input-Fully Charged");
+  const fcEl     = document.getElementById("input-Fully Charged");
   const fullKmEl = document.getElementById("input-Full km");
+  const endKmEl  = document.getElementById("input-Ending km");
   if (!fcEl || !fullKmEl) return;
 
-  if (fcEl.checked) {
-    fullKmEl.disabled = false;
-  } else {
-    fullKmEl.disabled = true;
+  // Full km is ALWAYS non-editable
+  fullKmEl.disabled = true;
+
+  if (fcEl.checked && endKmEl && endKmEl.value !== "") {
+    // Copy the current Ending km into Full km
+    fullKmEl.value = endKmEl.value;
+  } else if (!fcEl.checked) {
+    // If Full is unticked, clear Full km
     fullKmEl.value = "";
   }
 }
+
 
 // -------- Initial CSV loading --------
 function parseInitialCsv(text) {
@@ -575,6 +584,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
 
 
 
