@@ -295,6 +295,15 @@ body {
 .btn-grey:hover {
     background-color: #455a64;
 }
+/* Save button: green gradient 135deg from #22CC00 to #80FF80 */
+#save-btn {
+    background: linear-gradient(135deg, #22CC00, #80FF80);
+    color: #ffffff;
+}
+
+#save-btn:hover {
+    background: linear-gradient(135deg, #1BA500, #66DD66);
+}
 
 /* Actions card */
 .actions-card {
@@ -439,6 +448,7 @@ body {
         padding: 10px 10px 12px 10px;
     }
 }
+
 
 
 
