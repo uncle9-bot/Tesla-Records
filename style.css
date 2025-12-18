@@ -2,9 +2,9 @@
     --color-green: #4CAF50;
     --color-deep-green: #2E8B57;
     --color-grey: #607D8B;
-    --color-light-grey: #f4f4f4;
+    --color-light-grey: #F4F4F4;
     --color-text-dark: #333;
-    --color-duration-grey: #e0e0e0;
+    --color-duration-grey: #E0E0E0;
     --color-khaki: #EAFF80;
     --color-blond: #FAF0BE;
     --color-papayawhip: #FFEFD5;
@@ -182,7 +182,7 @@ body {
 /* When Full km is disabled, make it grey */
 .fg-fullkm input:disabled {
     background-color: var(--color-duration-grey);
-    color: #000000;
+    color: #555;
     cursor: not-allowed;
 }
 
@@ -448,6 +448,7 @@ body {
         padding: 10px 10px 12px 10px;
     }
 }
+
 
 
 
