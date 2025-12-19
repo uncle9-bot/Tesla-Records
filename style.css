@@ -308,7 +308,8 @@ body {
 
 /* Actions card */
 .actions-card {
-    background-color: light-grey;
+    background-color: #B3E5FF;
+    border: 1px solid #D1D1D6; /* Slightly darker border */    
     border-radius: 8px;
     padding: 10px 16px 12px 16px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.08);
@@ -317,6 +318,7 @@ body {
 
 .actions-card h3 {
     margin: 0 0 6px 0;
+    color: #ffffff;
     font-size: 1em;
 }
 
@@ -449,6 +451,7 @@ body {
         padding: 10px 10px 12px 10px;
     }
 }
+
 
 
 
