@@ -1,468 +1,259 @@
-:root {
-    --color-green: #4CAF50;
-    --color-deep-green: #2E8B57;
-    --color-grey: #607D8B;
-    --color-light-grey: #F4F4F4;
-    --color-text-dark: #333;
-    --color-duration-grey: #E0E0E0;
-    --color-khaki: #EAFF80;
-    --color-blond: #FAF0BE;
-    --color-papayawhip: #FFEFD5;
-    --color-screamin-green: #80FF80;
-    
-}
-
-* {
-    box-sizing: border-box;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: var(--color-light-grey);
-    color: var(--color-text-dark);
-}
-
-/* Container */
-.container {
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 10px 12px 40px 12px;
-}
-
-/* Dashboard */
-.dashboard {
-    background-color: blond;
-    background-image:linear-gradient(135deg, #FFBF80, #99FF66);
-    border-radius: 8px;
-    padding: 12px 16px;
-    margin-bottom: 12px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.632);
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    font-size: 1.2em;
-}
-
-.dashboard p {
-    margin: 0;
-}
-
-/* Form section */
-.form-section {
-    background-color: papayawhip;
-    border-radius: 8px;
-    padding: 14px 16px 18px 16px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.632);
-    margin-bottom: 14px;
-}
-
-.form-section h2 {
-    margin-top: 0;
-    margin-bottom: 10px;
-    font-size: 20px;
-    font-weight: bold;
-}
-
-/* Form rows & groups */
-.form-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 6px;
-}
-
-.form-group {
-    flex: 0 0 auto;
-    display: flex;
-    flex-direction: column;
-}
-
-.form-group label {
-    font-size: 16px;
-    margin-bottom: 3px;
-}
-
-.form-group input,
-.form-group textarea,
-.form-group select {
-    padding: 4px 6px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 1em;
-    background-color: #fcfcfc; /* default white */
-}
-
-.form-group textarea {
-    resize: vertical;
-    min-height: 50px;
-}
-
-/* Required field indicator */
-.required-field label::after {
-    content: " *";
-    color: red;
-}
-
-/* ----- EXACT WIDTHS FOR ENTRY FORM (px) ----- */
-
-/* Date 150px */
-.fg-date input {
-    width: 150px;
-}
-
-/* Location 250px */
-.fg-location input {
-    width: 250px;
-}
-
-/* Starting Time 100px */
-.fg-start-time input {
-    width: 100px;
-}
-
-/* Ending Time 100px */
-.fg-end-time input {
-    width: 100px;
-}
-
-/* Duration 70px */
-.fg-duration input {
-    width: 70px;
-}
-
-/* Starting km 100px */
-.fg-startkm input {
-    width: 100px;
-}
-
-/* Ending km 100px */
-.fg-endkm input {
-    width: 100px;
-}
-
-/* km added 70px + grey + read-only look */
-.fg-kmadded input {
-    width: 70px;
-    background-color: var(--color-duration-grey);
-    color: #555;
-    cursor: not-allowed;
-}
-
-/* Claimed kW 100px */
-.fg-claimedkw input {
-    width: 100px;
-}
-
-/* Claimed Amp 100px */
-.fg-claimedamp input {
-    width: 100px;
-}
-
-/* km/hr 70px */
-.fg-kmhr input {
-    width: 70px;
-}
-
-/* kWh added 70px */
-.fg-kwhadded input {
-    width: 70px;
-}
-
-/* Fully Charged checkbox container (base width) */
-.fg-fullycharged input[type="checkbox"] {
-    width: 70px;
-}
-
-/* Full km 70px */
-.fg-fullkm input {
-    width: 70px;
-}
-
-/* When Full km is disabled, make it grey */
-.fg-fullkm input:disabled {
-    background-color: var(--color-duration-grey);
-    color: #555;
-    cursor: not-allowed;
-}
-
-/* Odometer 100px */
-.fg-odo input {
-    width: 100px;
-}
-
-/* Charging Fee 70px */
-.fg-chargingfee input {
-    width: 70px;
-}
-
-/* Parking Fee 70px */
-.fg-parkingfee input {
-    width: 70px;
-}
-
-/* Cost per kW 70px + grey + read-only look */
-.fg-costkw input {
-    width: 70px;
-    background-color: var(--color-duration-grey);
-    color: #555;
-    cursor: not-allowed;
-}
-
-/* Cost per km 70px + grey + read-only look */
-.fg-costkm input {
-    width: 70px;
-    background-color: var(--color-duration-grey);
-    color: #555;
-    cursor: not-allowed;
-}
-
-/* Maintenance checkbox container (base width) */
-.fg-maintenance input[type="checkbox"] {
-    width: 70px;
-}
-
-/* Remarks fills remaining */
-.fg-remarks {
-    flex: 1 1 auto;
-}
-
-.fg-remarks textarea {
-    width: 100%;
-    min-height: 60px;
-}
-
-/* Colour rules */
-/* White entry boxes: Date, Starting Time, Ending Time, Fully Charged (default is white already) */
-.fg-date input,
-.fg-start-time input,
-.fg-end-time input,
-.fg-fullycharged input[type="checkbox"] {
-    background-color: #ffffff;
-}
-
-/* Grey entry boxes: Duration, km added */
-.duration-group input,
-.fg-kmadded input {
-    background-color: var(--color-duration-grey);
-}
-
-/* Duration read-only look */
-.duration-group input {
-    color: #555;
-    cursor: not-allowed;
-}
-
-/* Bigger tick boxes for Fully Charged & Maintenance (double size) */
-.fg-fullycharged input[type="checkbox"],
-.fg-maintenance  input[type="checkbox"] {
-    width: 24px;
-    height: 24px;
-}
-
-/* Buttons */
-.button-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 10px;
-}
-
-.btn {
-    flex: 1 1 0;
-    padding: 10px 10px;
-    border: none;
-    border-radius: 6px;
-    color: white;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 0.9em;
-    transition: background-color 0.2s ease;
-}
-
-.btn-green {
-    background-color: var(--color-papayawhip);
-}
-
-.btn-green:hover {
-    background-color: var(--color-blond);
-}
-
-.btn-grey {
-    background-color: var(--color-grey);
-}
-
-.btn-grey:hover {
-    background-color: #455a64;
-}
-/* Save button: green gradient 135deg from #22CC00 to #80FF80 */
-#save-btn {
-    background: linear-gradient(135deg, #22CC00, #80FF80);
-    color: #ffffff;
-}
-
-#save-btn:hover {
-    background: linear-gradient(135deg, #1BA500, #66DD66);
-}
-
-/* Actions card */
-.actions-card {
-    background-color: #B3E5FF;
-    border: 1px solid #D1D1D6; /* Slightly darker border */    
-    border-radius: 8px;
-    padding: 10px 16px 12px 16px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-    margin-bottom: 14px;
-}
-
-.actions-card h3 {
-    margin: 0 0 6px 0;
-    color: #ffffff;
-    font-size: 1em;
-}
-
-/* Records table section */
-.records-list-section {
-    background-color: white;
-    border-radius: 8px;
-    padding: 10px 16px 12px 16px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-}
-
-.records-list-section h3 {
-    margin: 0 0 6px 0;
-    font-size: 1em;
-}
-
-/* === All Maintenance Records: scrollable container === */
-#records-table-container {
-    max-height: 420px;
-    overflow-y: auto;        /* vertical scroll */
-    overflow-x: auto;        /* horizontal scroll */
-
-    /* iPhone / Safari friendly scrolling */
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior: contain;
-    touch-action: pan-x pan-y;
-
-    border-top: 1px solid #eee;
-    margin-top: 6px;
-}
-
-/* === All Maintenance Records table === */
-#records-table {
-    border-collapse: separate;
-    border-spacing: 0;
-    font-size: 0.85em;       /* same font size for th & td */
-    color: var(--color-text-dark);
-
-    width: 100%;
-    min-width: 1500px;       /* wider than screen; scrollbar will appear */
-    table-layout: fixed;     /* fixed column widths */
-    text-align: left;
-    background-color: #ffffff;
-}
-
-/* Sticky header row */
-#records-table thead {
-    position: sticky;
-    top: 0;
-    z-index: 5;
-}
-
-/* Header cells – 120px wide, left-aligned  */
-#records-table th {
-    padding: 8px 8px;
-    border-bottom: 1px solid #eee;
-
-    width: 120px;
-    max-width: 120px;
-
-    white-space: normal;
-    word-break: break-word;
-    vertical-align: top;
-
-    font-weight: normal;      /* same “weight feel” as body if you like */
-    background-color: #FFD1EE;
-    color: var(--color-text-dark);
-}
-
-
-/* Amend button in table */
-.amend-btn {
-    background-color: #FF0000;
-    color: white;
-    border: none;
-    padding: 4px 6px;
-    border-radius: 3px;
-    cursor: pointer;
-    font-size: 0.8em;
-}
-    
-/* Data cells – 120px wide, auto-wrap contents */
-#records-table td {
-    padding: 8px 8px;
-    border-bottom: 1px solid #eee;
-
-    width: 120px;
-    max-width: 120px;
-
-    white-space: normal;
-    word-break: break-word;
-    vertical-align: top;
-
-    overflow: hidden;
-    text-overflow: ellipsis;
-
-    font-size: 1em;           /* same as header because inherited */
-    color: var(--color-text-dark);
-}
-
-/* Keep text left in all cells */
-#records-table th,
-#records-table td {
-    text-align: left;
-}
-
-/* Optional: subtle zebra striping (remove if you want pure white) */
-#records-table tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-/* Hover highlight (optional; comment out if you don’t want it) */
-#records-table tbody tr:hover {
-    background-color: #E5F2FF;
-
-}
-
-.amend-btn:hover {
-    background-color: #e08f00;
-}
-
-/* Mobile tweaks */
-@media (max-width: 768px) {
-    .container {
-        padding: 6px;
-    }
-    .form-section,
-    .records-list-section,
-    .actions-card {
-        padding: 10px 10px 12px 10px;
-    }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>米埔支出管理 2026</title>
+    <style>
+        :root {
+            --primary-bg: #fcf8e3;
+            --header-bg: #f7e1a0;
+            --summary-blue: #00ffff;
+            --summary-grey: #d9d9d9;
+            --summary-green: #90ee90;
+        }
+        body { font-family: -apple-system, system-ui; background: var(--primary-bg); margin: 0; padding: 15px; padding-bottom: 50px; }
+        h2 { font-size: 1.2rem; border-left: 5px solid #f0ad4e; padding-left: 10px; margin-bottom: 15px; }
+
+        /* 表單佈局 */
+        .form-section { background: #fff; padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        
+        .form-row { display: flex; gap: 20px; margin-bottom: 12px; flex-wrap: wrap; }
+        .input-group { width: 200px; } /* 固定寬度 200px */
+        .full-width { width: 100%; max-width: 420px; margin-bottom: 12px; } /* 配合兩行 200px + gap */
+
+        label { font-size: 12px; color: #666; display: block; margin-bottom: 3px; font-weight: bold; }
+        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; box-sizing: border-box; background: white; }
+        
+        .btn-group { display: flex; gap: 10px; margin-top: 15px; max-width: 420px; }
+        button { flex: 1; padding: 12px; border: none; border-radius: 5px; font-weight: bold; font-size: 16px; cursor: pointer; }
+        .btn-add { background: #5cb85c; color: white; }
+        .btn-update { background: #4a90e2; color: white; display: none; }
+
+        /* 顯示區樣式 */
+        .net-display { background: #fff; padding: 10px; border-radius: 5px; border: 2px solid #f0ad4e; margin-bottom: 10px; text-align: center; font-weight: bold; font-size: 1.1rem; max-width: 420px; }
+        .table-wrapper { overflow-x: auto; background: #fff; border: 1px solid #ddd; border-radius: 5px; }
+        table { width: 100%; border-collapse: collapse; min-width: 1100px; font-size: 13px; }
+        th, td { border: 1px solid #eee; padding: 8px; text-align: left; }
+        th { background: var(--header-bg); position: sticky; top: 0; }
+        
+        .summary-container { margin-top: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+        .summary-card { padding: 12px; border-radius: 8px; font-size: 14px; line-height: 1.6; min-height: 100px; }
+        .blue-card { background: var(--summary-blue); border: 1px solid #00cccc; }
+        .grey-card { background: var(--summary-grey); border: 1px solid #bbb; }
+        .green-card { background: var(--summary-green); border: 1px solid #77cc77; }
+        
+        .settled { background-color: #f9f9f9; color: #aaa; }
+        .btn-del { background: #ff4d4d; color: white; border: none; padding: 4px 6px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+    <h2>米埔支出管理 2026</h2>
+
+    <div class="form-section">
+        <div class="full-width">
+            <label>詳情</label>
+            <input type="text" id="details" placeholder="輸入詳情內容">
+        </div>
+
+        <div class="form-row">
+            <div class="input-group">
+                <label>日期</label>
+                <input type="date" id="date">
+            </div>
+            <div class="input-group">
+                <label>類別</label>
+                <select id="category">
+                    <option value="Medical">Medical</option>
+                    <option value="Medicine">Medicine</option>
+                    <option value="Contribution">Contribution</option>
+                    <option value="Domestic Helper">Domestic Helper</option>
+                    <option value="Home">Home</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="input-group">
+                <label>金額 ($)</label>
+                <input type="number" id="expense" placeholder="0">
+            </div>
+            <div class="input-group">
+                <label>預付/存入者</label>
+                <select id="person">
+                    <option value="">選擇人員</option>
+                    <option value="Josephine">Josephine</option>
+                    <option value="Thomas">Thomas</option>
+                    <option value="Kelvin">Kelvin</option>
+                    <option value="Sylvia">Sylvia</option>
+                    <option value="Kathy">Kathy</option>
+                    <option value="Charles">Charles</option>
+                    <option value="Matthew">Matthew</option>
+                    <option value="Edward">Edward</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="input-group">
+                <label>收回日期</label>
+                <input type="date" id="receiveDate">
+            </div>
+            <div class="input-group">
+                <label>收回途徑</label>
+                <input type="text" id="receiveMethod" placeholder="例如：轉帳">
+            </div>
+        </div>
+
+        <div class="full-width">
+            <label>備註</label>
+            <textarea id="remarks" style="height:40px;"></textarea>
+        </div>
+
+        <div class="btn-group">
+            <button id="addBtn" class="btn-add" onclick="addRecord()">新增記錄</button>
+            <button id="updateBtn" class="btn-update" onclick="updateRecord()">完成修改</button>
+        </div>
+    </div>
+
+    <div class="net-display" id="netAmountDisplay">結餘淨額: $0</div>
+
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>選取</th>
+                    <th>日期</th>
+                    <th>詳情</th>
+                    <th>金額</th>
+                    <th>人員</th>
+                    <th>收回日期</th>
+                    <th>途徑</th>
+                    <th>備註</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody id="dataList"></tbody>
+        </table>
+    </div>
+
+    <div class="summary-container">
+        <div class="summary-card blue-card">
+            <strong>2026 尚未收回預付：</strong>
+            <div id="outstandingSummary"></div>
+        </div>
+        <div class="summary-card green-card">
+            <strong>各人 Contribution 總額：</strong>
+            <div id="contributionSummary"></div>
+        </div>
+        <div class="summary-card grey-card">
+            <strong>選取項目合計：</strong>
+            <div id="selectedTotal" style="font-size: 1.2rem; font-weight: bold;">$0</div>
+        </div>
+    </div>
+
+    <script>
+        let db = JSON.parse(localStorage.getItem('maipo_db')) || [];
+        let editId = null;
+        const people = ["Josephine", "Thomas", "Kelvin", "Sylvia", "Kathy", "Charles", "Matthew", "Edward"];
+
+        document.getElementById('date').valueAsDate = new Date();
+
+        function render() {
+            const list = document.getElementById('dataList');
+            list.innerHTML = '';
+            let selectedSum = 0;
+            let netTotal = 0;
+            let contriMap = {};
+            let outstandingMap = {};
+            people.forEach(p => { contriMap[p] = 0; outstandingMap[p] = 0; });
+
+            db.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach((item) => {
+                if (item.category === "Contribution") {
+                    netTotal += item.expense;
+                    if (contriMap.hasOwnProperty(item.person)) contriMap[item.person] += item.expense;
+                } else {
+                    netTotal -= item.expense;
+                    if (!item.receiveDate && outstandingMap.hasOwnProperty(item.person)) {
+                        outstandingMap[item.person] += item.expense;
+                    }
+                }
+                if (item.checked) selectedSum += item.expense;
+
+                const tr = document.createElement('tr');
+                if (item.receiveDate) tr.className = 'settled';
+                tr.innerHTML = `
+                    <td><input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleCheck('${item.id}')"></td>
+                    <td>${item.date.substring(5)}</td>
+                    <td>${item.details}</td>
+                    <td style="color:${item.category==='Contribution'?'green':'red'}; font-weight:bold">$${item.expense.toLocaleString()}</td>
+                    <td>${item.person}</td>
+                    <td>${item.receiveDate || '-'}</td>
+                    <td>${item.receiveMethod || '-'}</td>
+                    <td>${item.remarks || ''}</td>
+                    <td><button onclick="editRecord('${item.id}')">改</button> <button class="btn-del" onclick="deleteRecord('${item.id}')">刪</button></td>
+                `;
+                list.appendChild(tr);
+            });
+
+            document.getElementById('netAmountDisplay').innerText = `目前結餘淨額 (Net): $${netTotal.toLocaleString()}`;
+            document.getElementById('selectedTotal').innerText = `$${selectedSum.toLocaleString()}`;
+            
+            document.getElementById('outstandingSummary').innerHTML = people.map(p => `${p}: <span style="float:right">$${outstandingMap[p].toLocaleString()}</span>`).join('<br>');
+            document.getElementById('contributionSummary').innerHTML = people.map(p => contriMap[p] > 0 ? `${p}: <span style="float:right">$${contriMap[p].toLocaleString()}</span>` : '').filter(s => s !== '').join('<br>');
+
+            localStorage.setItem('maipo_db', JSON.stringify(db));
+        }
+
+        function addRecord() {
+            const newItem = {
+                id: 'id' + Date.now(),
+                date: document.getElementById('date').value,
+                details: document.getElementById('details').value,
+                category: document.getElementById('category').value,
+                expense: parseFloat(document.getElementById('expense').value) || 0,
+                person: document.getElementById('person').value,
+                receiveDate: document.getElementById('receiveDate').value,
+                receiveMethod: document.getElementById('receiveMethod').value,
+                remarks: document.getElementById('remarks').value,
+                checked: false
+            };
+            if(!newItem.details || !newItem.person) { alert("請填寫詳情及選擇人員"); return; }
+            db.push(newItem);
+            resetForm();
+            render();
+        }
+
+        function editRecord(id) {
+            const item = db.find(i => i.id === id);
+            editId = id;
+            ['date','details','category','expense','person','receiveDate','receiveMethod','remarks'].forEach(key => {
+                document.getElementById(key).value = item[key] || '';
+            });
+            document.getElementById('addBtn').style.display = 'none';
+            document.getElementById('updateBtn').style.display = 'block';
+            window.scrollTo(0,0);
+        }
+
+        function updateRecord() {
+            const index = db.findIndex(i => i.id === editId);
+            ['date','details','category','expense','person','receiveDate','receiveMethod','remarks'].forEach(key => {
+                db[index][key] = key === 'expense' ? parseFloat(document.getElementById(key).value) : document.getElementById(key).value;
+            });
+            editId = null;
+            resetForm();
+            render();
+            document.getElementById('addBtn').style.display = 'block';
+            document.getElementById('updateBtn').style.display = 'none';
+        }
+
+        function deleteRecord(id) { if(confirm("確定刪除？")) { db = db.filter(i => i.id !== id); render(); } }
+        function toggleCheck(id) { const index = db.findIndex(i => i.id === id); db[index].checked = !db[index].checked; render(); }
+        function resetForm() { ['details','expense','receiveDate','receiveMethod','remarks'].forEach(id => document.getElementById(id).value = ''); }
+
+        render();
+    </script>
+</body>
+</html>
